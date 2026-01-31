@@ -1573,3 +1573,45 @@ def mark_message_read(request, id):
         return Response({"message": "Marked as read"})
     except ContactMessage.DoesNotExist:
         return Response({"error": "Message not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+
+
+
+@api_view(['GET', 'POST'])
+@permission_classes([IsAdminUser])
+def cities_list(request):
+    if request.method == 'GET':
+        cities = City.objects.all().order_by('name')
+        serializer = CitySerializer(cities, many=True)
+        return Response({'success': True, 'data': serializer.data})
+    
+    if request.method == 'POST':
+        serializer = CitySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'success': True, 'message': 'City created', 'data': serializer.data}, status=201)
+        return Response({'success': False, 'errors': serializer.errors}, status=400)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([IsAdminUser])
+def city_detail(request, pk):
+    try:
+        city = City.objects.get(pk=pk)
+    except City.DoesNotExist:
+        return Response({'success': False, 'error': 'City not found'}, status=404)
+    
+    if request.method == 'GET':
+        serializer = CitySerializer(city)
+        return Response({'success': True, 'data': serializer.data})
+    
+    if request.method == 'PUT':
+        serializer = CitySerializer(city, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'success': True, 'message': 'City updated', 'data': serializer.data})
+        return Response({'success': False, 'errors': serializer.errors}, status=400)
+    
+    if request.method == 'DELETE':
+        city.delete()
+        return Response({'success': True, 'message': 'City deleted'})

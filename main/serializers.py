@@ -433,3 +433,10 @@ class WAInfoSerializer(serializers.ModelSerializer):
         model = WAInfo
         fields = '__all__'
         read_only_fields = ['created_at', 'updated_at']
+
+
+
+class CitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = City
+        fields = ['id', 'name', 'delivery_fee']
