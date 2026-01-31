@@ -46,7 +46,7 @@ urlpatterns = [
     # path("banners/api/<int:pk>/delete/", api_views.banner_delete_api, name="banner_delete_api"),
     # path("api/banner/create/", api_views.banner_create_api, name="banner_add"),
     # path('invoices/delete/<int:invoice_id>/', api_views.delete_invoice, name='delete_invoice'),
-    # path('api/products/<int:product_id>/', api_views.product_detail_smart, name='product-detail-smart'),
+    path('api/products/<int:product_id>/', api_views.product_detail_smart, name='product-detail-smart'),
     # path('api/contact/message/', api_views.contact_message_create_api, name='contact-message-create'),
 
     # Cities (new)
