@@ -1,0 +1,45 @@
+{% extends 'main/base.html' %}
+{% block title %}Contact Us{% endblock %}
+{% block content %}
+<div class="contact-container">
+    <h2 class="text-center mb-4">Contact Us</h2>
+    <form method="POST" class="contact-form">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" name="email" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Message</label>
+            <textarea class="form-control" name="message" rows="4" required></textarea>
+        </div>
+        <button class="btn btn-success" type="submit">Send Message</button>
+    </form>
+
+    <h3 class="mt-4">Our Branches</h3>
+    <div id="map" class="map-container" style="height:400px;width:100%;"></div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+function initMap() {
+    const branches = [
+        {% for branch in branches %}
+        {lat: {{ branch.latitude }}, lng: {{ branch.longitude }}, name: '{{ branch.name }}' },
+        {% endfor %}
+    ];
+    const map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 12,
+      center: branches[0] || {lat:0,lng:0}
+    });
+    branches.forEach(branch => {
+      new google.maps.Marker({
+        position: branch,
+        map: map,
+        title: branch.name
+      });
+    });
+}
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
+{% endblock %}

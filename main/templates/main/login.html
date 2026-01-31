@@ -1,0 +1,255 @@
+{% extends 'main/base.html' %} {% load i18n %}
+<!-- prettier-ignore -->
+{% block title %}{% trans "Login - AWFERLK Solutions" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-5 col-md-7">
+      <div class="modern-card p-4 p-sm-5" data-aos="fade-up">
+        <!-- Login Header -->
+        <div class="text-center mb-5">
+          <div class="login-icon mb-4">
+            <i class="fas fa-lock fa-3x text-primary"></i>
+          </div>
+          <h2 class="fw-bold">{% trans "Welcome Back" %}</h2>
+          <p class="text-muted">
+            {% trans "Sign in to your account to continue" %}
+          </p>
+        </div>
+
+        <!-- Login Form -->
+        <form method="POST" id="loginForm">
+          {% csrf_token %} {% if messages %}
+          <div class="alert alert-danger" role="alert">
+            {% for message in messages %}
+            <div class="d-flex align-items-center">
+              <i class="fas fa-exclamation-circle me-2"></i>
+              {{ message }}
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          <!-- Username Field -->
+          <div class="mb-4">
+            <label for="username" class="form-label fw-semibold">
+              <i class="fas fa-user me-2"></i>{% trans "Username" %}
+            </label>
+            <div class="input-group">
+              <span class="input-group-text section-alt border-end-0">
+                <i class="fas fa-user text-muted"></i>
+              </span>
+              <input
+                type="text"
+                class="form-control border-start-0"
+                id="username"
+                name="username"
+                required
+                placeholder="{% trans 'Enter your username' %}"
+              />
+            </div>
+          </div>
+
+          <!-- Password Field -->
+          <div class="mb-4">
+            <label for="password" class="form-label fw-semibold">
+              <i class="fas fa-key me-2"></i>{% trans "Password" %}
+            </label>
+            <div class="input-group">
+              <span class="input-group-text section-alt border-end-0">
+                <i class="fas fa-lock text-muted"></i>
+              </span>
+              <input
+                type="password"
+                class="form-control border-start-0"
+                id="password"
+                name="password"
+                required
+                placeholder="{% trans 'Enter your password' %}"
+              />
+              <button
+                type="button"
+                class="btn btn-outline-secondary border-start-0"
+                onclick="togglePassword()"
+              >
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Remember Me & Forgot Password -->
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="rememberMe" />
+              <label class="form-check-label text-muted small" for="rememberMe">
+                {% trans "Remember me" %}
+              </label>
+            </div>
+            <a href="#" class="text-primary small text-decoration-none">
+              {% trans "Forgot password?" %}
+            </a>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="d-grid mb-4">
+            <button
+              type="submit"
+              class="btn btn-primary-modern btn-lg btn-modern"
+              id="loginBtn"
+            >
+              <i class="fas fa-sign-in-alt me-2"></i>{% trans "Sign In" %}
+            </button>
+          </div>
+
+          <!-- Divider -->
+         
+          <!-- Social Login (Optional) -->
+          <!-- prettier-ignore -->
+          
+
+          <!-- Sign Up / Contact Admin Link -->
+          <div class="text-center">
+            <p class="text-muted mb-0">
+              {% trans "Don't have an account?" %}
+              <a href="#" class="text-primary text-decoration-none fw-semibold">
+                {% trans "Contact administrator" %}
+              </a>
+            </p>
+          </div>
+        </form>
+      </div>
+
+      <!-- Security Notice -->
+      <div class="text-center mt-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="d-inline-flex align-items-center text-muted small">
+          <i class="fas fa-shield-alt me-2 text-success"></i>
+          <span>
+            {% trans "Your login information is securely encrypted" %}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function togglePassword() {
+    const passwordInput = document.getElementById("password");
+    const toggleIcon = document.querySelector("#password + .btn i");
+
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+      if (toggleIcon) {
+        toggleIcon.classList.replace("fa-eye", "fa-eye-slash");
+      }
+    } else {
+      passwordInput.type = "password";
+      if (toggleIcon) {
+        toggleIcon.classList.replace("fa-eye-slash", "fa-eye");
+      }
+    }
+  }
+
+  // Form submission handling
+  document.getElementById("loginForm").addEventListener("submit", function (e) {
+    const submitBtn = document.getElementById("loginBtn");
+
+    // Show loading state
+    submitBtn.innerHTML =
+      '<div class="loading-spinner me-2"></div>{% trans "Signing in..." %}';
+    submitBtn.disabled = true;
+
+    // Form submits normally; if server returns page with errors,
+    // button will be reset by re-rendered HTML.
+  });
+
+  // Add input animations
+  document.querySelectorAll(".form-control").forEach((input) => {
+    input.addEventListener("focus", function () {
+      this.parentElement.classList.add("focus");
+    });
+
+    input.addEventListener("blur", function () {
+      if (!this.value) {
+        this.parentElement.classList.remove("focus");
+      }
+    });
+  });
+</script>
+
+<style>
+  .modern-card {
+    background: var(--card-bg, #ffffff);
+    color: var(--text-color, #111827);
+    border: 1px solid var(--card-border-color, #e2e8f0);
+    border-radius: 1rem;
+  }
+
+  .login-icon {
+    background: linear-gradient(
+      135deg,
+      var(--primary, #2563eb),
+      var(--primary-dark, #1f2933)
+    );
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    color: white;
+  }
+
+  .input-group:focus-within {
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+    border-radius: 8px;
+  }
+
+  .input-group:focus-within .input-group-text {
+    border-color: var(--primary, #2563eb);
+  }
+
+  .form-control:focus {
+    box-shadow: none;
+    border-color: var(--primary, #2563eb);
+  }
+
+  .form-check-input:checked {
+    background-color: var(--primary, #2563eb);
+    border-color: var(--primary, #2563eb);
+  }
+
+  .btn-outline-secondary:hover {
+    background-color: var(--primary, #2563eb);
+    border-color: var(--primary, #2563eb);
+    color: white;
+  }
+
+  /* Simple loading spinner (reused across pages) */
+  .loading-spinner {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: var(--primary, #2563eb);
+    animation: spin 0.8s ease-in-out infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 576px) {
+    .modern-card {
+      margin: 1rem;
+      padding: 2rem !important;
+    }
+  }
+</style>
+{% endblock %}

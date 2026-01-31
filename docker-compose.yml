@@ -1,0 +1,15 @@
+version: '3.3'
+
+services:
+  shop1_saad:
+    build: .
+    container_name: shop1_saad_container
+    command: python manage.py runserver 0.0.0.0:8000  # Use Django's dev server
+    volumes:
+      - .:/app  # Mount local code into the container
+    ports:
+      - "8001:8000"  # Host:Container
+    environment:
+      - DEBUG=False
+    restart: always
+    depends_on: []

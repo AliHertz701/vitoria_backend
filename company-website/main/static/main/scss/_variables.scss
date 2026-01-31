@@ -1,0 +1,26 @@
+// This file defines SCSS variables for consistent styling.
+
+$primary-color: #007bff; // Bootstrap primary color
+$secondary-color: #6c757d; // Bootstrap secondary color
+$success-color: #28a745; // Bootstrap success color
+$danger-color: #dc3545; // Bootstrap danger color
+$warning-color: #ffc107; // Bootstrap warning color
+$info-color: #17a2b8; // Bootstrap info color
+$light-color: #f8f9fa; // Bootstrap light color
+$dark-color: #343a40; // Bootstrap dark color
+
+$font-family-base: 'Helvetica Neue', Arial, sans-serif; // Base font family
+$font-size-base: 1rem; // Base font size
+$line-height-base: 1.5; // Base line height
+
+$border-radius: 0.25rem; // Border radius for buttons and inputs
+$box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); // Box shadow for cards and modals
+
+$container-max-width: 1200px; // Maximum width for containers
+$navbar-height: 56px; // Height of the navbar
+
+// Breakpoints for responsive design
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;

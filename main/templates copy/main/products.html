@@ -1,0 +1,369 @@
+{% extends 'main/base.html' %} {% block title %}Our Products - InnovateTech
+Solutions{% endblock %} {% block content %} {% load static %}
+
+<!-- Page Header -->
+<section class="py-5 bg-primary text-white">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
+        <h1 class="display-4 fw-bold mb-4">Our Products</h1>
+        <p class="lead mb-0">
+          Discover our comprehensive suite of technology solutions
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Products Grid -->
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      {% for product in products %}
+      <div
+        class="col-lg-4 col-md-6"
+        data-aos="fade-up"
+        data-aos-delay="{{ forloop.counter0|add:100 }}"
+      >
+        <div class="modern-card h-100 product-card">
+          <div class="product-image-container">
+            {% if product.image %}
+            <img
+              src="{{ product.image.url }}"
+              class="product-image"
+              alt="{{ product.name }}"
+            />
+            {% else %}
+            <img
+              src="{% static 'main/img/gallery-img-01.jpg' %}"
+              class="product-image"
+              alt="No image"
+            />
+            {% endif %}
+            <div class="product-overlay">
+              <button
+                class="btn btn-primary-modern btn-sm"
+                onclick="showInquiryForm({{ product.id }})"
+              >
+                <i class="fas fa-info-circle me-1"></i>Place Inquiry
+              </button>
+            </div>
+          </div>
+          <div class="p-4">
+            <h5 class="fw-bold mb-2">{{ product.name }}</h5>
+            <p class="text-muted mb-3">
+              {{ product.description|truncatewords:25 }}
+            </p>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="badge bg-success bg-opacity-10 text-success">
+                <i class="fas fa-box me-1"></i>{{ product.quantity_available }}
+                Available
+              </span>
+              <span class="text-primary fw-bold"
+                >${{ product.price|default:"Custom" }}</span
+              >
+            </div>
+
+            <!-- Inline Inquiry Form -->
+            <div
+              class="inquiry-form-container mt-3"
+              id="inquiry-form-{{ product.id }}"
+              style="display: none"
+            >
+              <form class="inquiryForm">
+                {% csrf_token %}
+                <input type="hidden" name="product" value="{{ product.id }}" />
+
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">Quantity</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    name="quantity"
+                    required
+                    min="1"
+                    max="{{ product.quantity_available }}"
+                  />
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">Delivery Address</label>
+                  <textarea
+                    class="form-control"
+                    name="address"
+                    rows="2"
+                    required
+                    placeholder="Enter complete delivery address"
+                  ></textarea>
+                </div>
+
+                <div class="row g-2">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label class="form-label fw-semibold">City</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="city"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label class="form-label fw-semibold">Phone Number</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="phone_number"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label fw-semibold"
+                    >Pick Location on Map</label
+                  >
+                  <div id="map-{{ product.id }}" class="map-container"></div>
+                  <input type="hidden" name="latitude" />
+                  <input type="hidden" name="longitude" />
+                </div>
+
+                <div class="d-grid gap-2">
+                  <button type="submit" class="btn btn-success btn-modern">
+                    <i class="fas fa-paper-plane me-1"></i>Submit Inquiry
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary"
+                    onclick="hideInquiryForm({{ product.id }})"
+                  >
+                    Cancel
+                  </button>
+                </div>
+
+                <div class="text-danger mt-2 form-errors small"></div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center" data-aos="fade-up">
+        <div class="modern-card p-5">
+          <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+          <h4 class="text-muted">No Products Available</h4>
+          <p class="text-muted">Check back later for our latest offerings.</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Load Google Maps API -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyArwI9jJAXm0u75YnXMTTq6v0CpVkqQRP0&callback=initMap"></script>
+
+<script>
+  let maps = {};
+  let markers = {};
+
+  function showInquiryForm(productId) {
+    const container = document.getElementById(`inquiry-form-${productId}`);
+    container.style.display =
+      container.style.display === "none" ? "block" : "none";
+
+    if (container.style.display === "block") {
+      initMap(productId);
+      // Scroll to form
+      container.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
+
+  function hideInquiryForm(productId) {
+    const container = document.getElementById(`inquiry-form-${productId}`);
+    container.style.display = "none";
+  }
+
+  function initMap(productId) {
+    const mapDiv = document.getElementById(`map-${productId}`);
+    if (mapDiv.dataset.initialized) return;
+    mapDiv.dataset.initialized = true;
+
+    const map = new google.maps.Map(mapDiv, {
+      center: { lat: 30.0444, lng: 31.2357 },
+      zoom: 6,
+      styles: [
+        {
+          featureType: "all",
+          elementType: "geometry",
+          stylers: [{ color: "#f5f5f5" }],
+        },
+        {
+          featureType: "water",
+          elementType: "geometry",
+          stylers: [{ color: "#c5e1f6" }],
+        },
+      ],
+    });
+
+    maps[productId] = map;
+
+    map.addListener("click", function (event) {
+      let lat = event.latLng.lat();
+      let lng = event.latLng.lng();
+
+      lat = parseFloat(lat.toFixed(14));
+      lng = parseFloat(lng.toFixed(14));
+
+      if (markers[productId]) {
+        markers[productId].setMap(null);
+      }
+
+      markers[productId] = new google.maps.Marker({
+        position: { lat, lng },
+        map: map,
+        animation: google.maps.Animation.DROP,
+      });
+
+      const form = mapDiv
+        .closest(".inquiry-form-container")
+        .querySelector("form");
+      form.querySelector("[name=latitude]").value = lat;
+      form.querySelector("[name=longitude]").value = lng;
+    });
+  }
+
+  // Handle form submission via AJAX
+  document.querySelectorAll(".inquiryForm").forEach((form) => {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      const errorsDiv = this.querySelector(".form-errors");
+
+      // Show loading state
+      submitBtn.innerHTML =
+        '<div class="loading-spinner me-2"></div>Processing...';
+      submitBtn.disabled = true;
+
+      const formData = new FormData(this);
+
+      fetch("{% url 'create_inquiry' %}", {
+        method: "POST",
+        headers: { "X-CSRFToken": formData.get("csrfmiddlewaretoken") },
+        body: formData,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.id) {
+            // Success
+            errorsDiv.innerHTML = "";
+            this.innerHTML = `
+                    <div class="text-center text-success py-4">
+                        <i class="fas fa-check-circle fa-3x mb-3"></i>
+                        <h5>Inquiry Submitted Successfully!</h5>
+                        <p class="text-muted">We'll contact you shortly.</p>
+                        <button type="button" class="btn btn-primary-modern" onclick="location.reload()">
+                            <i class="fas fa-redo me-1"></i>Submit Another
+                        </button>
+                    </div>
+                `;
+          } else {
+            // Show errors
+            let errorsHTML = "";
+            for (const [field, messages] of Object.entries(data)) {
+              errorsHTML += `<p><i class="fas fa-exclamation-circle me-1"></i>${field}: ${messages.join(
+                ", "
+              )}</p>`;
+            }
+            errorsDiv.innerHTML = errorsHTML;
+
+            // Reset button
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+          }
+        })
+        .catch((err) => {
+          errorsDiv.innerHTML =
+            '<p><i class="fas fa-exclamation-triangle me-1"></i>An error occurred while submitting your inquiry.</p>';
+          submitBtn.innerHTML = originalText;
+          submitBtn.disabled = false;
+        });
+    });
+  });
+
+  // Close other open forms when opening a new one
+  document.addEventListener("click", function (e) {
+    if (e.target.closest(".product-card")) {
+      const clickedProductId = e.target
+        .closest(".product-card")
+        .id.split("-")[1];
+      document
+        .querySelectorAll(".inquiry-form-container")
+        .forEach((container) => {
+          if (!container.id.includes(clickedProductId)) {
+            container.style.display = "none";
+          }
+        });
+    }
+  });
+</script>
+
+<style>
+  .product-image-container {
+    position: relative;
+    overflow: hidden;
+    height: 250px;
+  }
+
+  .product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .product-card:hover .product-image {
+    transform: scale(1.05);
+  }
+
+  .product-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .product-card:hover .product-overlay {
+    opacity: 1;
+  }
+
+  .map-container {
+    height: 200px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid #e2e8f0;
+  }
+
+  .inquiry-form-container {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 1rem;
+  }
+
+  .form-label {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+</style>
+{% endblock %}

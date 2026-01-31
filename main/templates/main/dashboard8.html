@@ -1,0 +1,3697 @@
+{% extends 'main/base.html' %} {% load i18n %}
+<!-- prettier-ignore -->
+{% block title %}{% trans "Admin Dashboard - AWFERLK Solutions" %}{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+  <!-- Dashboard Header -->
+  <div class="dashboard-header mb-4" data-aos="fade-down">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <h1 class="display-5 fw-bold dashboard-title mb-2">
+          <i class="fas fa-tachometer-alt me-3 text-primary"></i>
+          {% trans "Admin Dashboard" %}
+        </h1>
+        <p class="text-muted">
+          {% trans "Manage products, inquiries, messages, and branches" %}
+        </p>
+      </div>
+      <div class="col-md-4 text-md-end">
+        <div class="d-flex flex-wrap gap-2 justify-content-md-end">
+          <button
+            class="btn btn-primary-modern btn-modern"
+            data-bs-toggle="modal"
+            data-bs-target="#addProductModal"
+          >
+            <i class="fas fa-plus me-2"></i>
+            {% trans "Add Product" %}
+          </button>
+          <button
+            class="btn btn-success-modern btn-modern"
+            data-bs-toggle="modal"
+            data-bs-target="#addBranchModal"
+          >
+            <i class="fas fa-map-marker-alt me-2"></i>
+            {% trans "Add Branch" %}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="row g-4 mb-5">
+    <div class="col-xl-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+      <div class="stats-card bg-primary text-white">
+        <div class="stats-icon">
+          <i class="fas fa-box"></i>
+        </div>
+        <div class="stats-content">
+          <h3 class="stats-number">{{ products|length }}</h3>
+          <p class="stats-label">{% trans "Total Products" %}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+      <div class="stats-card bg-success text-white">
+        <div class="stats-icon">
+          <i class="fas fa-question-circle"></i>
+        </div>
+        <div class="stats-content">
+          <h3 class="stats-number">{{ Invoices|length }}</h3>
+          <p class="stats-label">{% trans "Product Inquiries" %}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+      <div class="stats-card bg-warning text-white">
+        <div class="stats-icon">
+          <i class="fas fa-envelope"></i>
+        </div>
+        <div class="stats-content">
+          <h3 class="stats-number">{{ messages|length }}</h3>
+          <p class="stats-label">{% trans "Messages" %}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
+      <div class="stats-card bg-info text-white">
+        <div class="stats-icon">
+          <i class="fas fa-code-branch"></i>
+        </div>
+        <div class="stats-content">
+          <h3 class="stats-number">{{ branches|length }}</h3>
+          <p class="stats-label">{% trans "Branches" %}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Categories Section -->
+  <div class="dashboard-section mb-5" data-aos="fade-up" data-aos-delay="300">
+    <div
+      class="section-header d-flex justify-content-between align-items-center mb-4"
+    >
+      <h3 class="section-title">
+        <i class="fas fa-tags me-2 text-warning"></i>
+        {% trans "Categories" %}
+      </h3>
+      <button
+        class="btn btn-success-modern btn-sm"
+        data-bs-toggle="modal"
+        data-bs-target="#addCategoryModal"
+      >
+        <i class="fas fa-plus me-1"></i>
+        {% trans "Add Category" %}
+      </button>
+    </div>
+
+    <div class="modern-card">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>{% trans "Image" %}</th>
+              <th>{% trans "Name" %}</th>
+              <th>{% trans "Description" %}</th>
+              <th>{% trans "Actions" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for category in categories %}
+            <tr>
+              <td>
+                {% if category.image %}
+                <img
+                  src="{{ category.image.url }}"
+                  alt="{{ category.name }}"
+                  class="rounded"
+                  style="height: 50px; width: 50px; object-fit: cover"
+                />
+                {% else %}
+                <div
+                  class="no-image-placeholder d-flex justify-content-center align-items-center rounded bg-light"
+                  style="height: 50px; width: 50px"
+                >
+                  <i class="fas fa-image text-muted"></i>
+                </div>
+                {% endif %}
+              </td>
+              <td>{{ category.name }}</td>
+              <td>
+                <span
+                  class="text-truncate d-inline-block"
+                  style="max-width: 200px"
+                  title="{{ category.description }}"
+                >
+                  {{ category.description }}
+                </span>
+              </td>
+              <td>
+                <div class="btn-group btn-group-sm">
+                  <!-- prettier-ignore -->
+                  <button
+                    class="btn btn-outline-primary edit-category-btn mx-1"
+                    title="{% trans 'Edit' %}"
+                    data-category-id="{{ category.id }}"
+                    data-category-name="{{ category.name }}"
+                    data-category-description="{{ category.description }}"
+                    {% if category.image and category.image.name %}
+                      data-category-image="{{ category.image.url }}"
+                    {% else %}
+                      data-category-image=""
+                    {% endif %}
+                  >
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-danger delete-category-btn mx-1"
+                    title="{% trans 'Delete' %}"
+                    data-category-id="{{ category.id }}"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="4" class="text-center py-4">
+                <i class="fas fa-tags fa-2x text-muted mb-2"></i>
+                <p class="text-muted mb-0">
+                  {% trans "No categories added yet" %}
+                </p>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Invoices Section -->
+  <div class="dashboard-section mb-5" data-aos="fade-up" data-aos-delay="300">
+    <div
+      class="section-header d-flex justify-content-between align-items-center mb-4"
+    >
+      <h3 class="section-title">
+        <i class="fas fa-file-invoice-dollar me-2 text-warning"></i>
+        {% trans "Invoices" %}
+      </h3>
+    </div>
+
+    <div class="modern-card">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>{% trans "Invoice ID" %}</th>
+              <th>{% trans "Name" %}</th>
+              <th>{% trans "City / Address" %}</th>
+              <th>{% trans "Phone" %}</th>
+              <th>{% trans "Subtotal" %}</th>
+              <th>{% trans "Delivery Fee" %}</th>
+              <th>{% trans "Total" %}</th>
+              <th>{% trans "Items" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for invoice in invoices %}
+            <tr>
+              <td>#{{ invoice.id }}</td>
+              <td>{{ invoice.name|default:"Guest" }}</td>
+              <td>
+                <div>{{ invoice.city }}</div>
+                <small class="text-muted">{{ invoice.address }}</small>
+              </td>
+              <td>{{ invoice.phone }}</td>
+              <td>${{ invoice.subtotal }}</td>
+              <!-- prettier-ignore -->
+              <td>
+                {% if invoice.delivery_fee %} ${{ invoice.delivery_fee }} {% else %} $0.00 {% endif %}
+              </td>
+              <td><strong>${{ invoice.total }}</strong></td>
+              <td>
+                <button
+                  class="btn btn-sm btn-outline-primary"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#invoiceItems{{ invoice.id }}"
+                  aria-expanded="false"
+                  aria-controls="invoiceItems{{ invoice.id }}"
+                >
+                  {% trans "View Items" %}
+                </button>
+              </td>
+            </tr>
+
+            <tr class="collapse" id="invoiceItems{{ invoice.id }}">
+              <td colspan="8">
+                <div class="table-responsive">
+                  <table class="table table-sm table-bordered mb-0">
+                    <thead class="table-light">
+                      <tr>
+                        <th>{% trans "Product" %}</th>
+                        <th>{% trans "Product ID" %}</th>
+                        <th>{% trans "Quantity" %}</th>
+                        <th>{% trans "Price (Original)" %}</th>
+                        <th>{% trans "Discount (%)" %}</th>
+                        <th>{% trans "Price After Discount" %}</th>
+                        <th>{% trans "Subtotal" %}</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {% for item in invoice.items.all %}
+                      <tr>
+                        <td>{{ item.name|default:"-" }}</td>
+                        <td>{{ item.product_id }}</td>
+                        <td>{{ item.quantity }}</td>
+
+                        {# Original price per unit #}
+                        <!-- prettier-ignore -->
+                        <td>
+                          ${{ item.original_price }}
+                        </td>
+
+                        {# Discount % #}
+                        <!-- prettier-ignore -->
+                        <td>
+                          {% if item.discount_percentage %}
+                          {{ item.discount_percentage }}% {% else %} 0% {% endif %}
+                        </td>
+                        <!-- prettier-ignore -->
+                        {# Discounted price per unit (already stored in item.price) #}
+                        <td>${{ item.price }}</td>
+
+                        {# Discounted subtotal #}
+                        <td>${{ item.subtotal }}</td>
+                      </tr>
+                      {% empty %}
+                      <tr>
+                        <td colspan="7" class="text-center text-muted">
+                          {% trans "No items in this invoice." %}
+                        </td>
+                      </tr>
+                      {% endfor %} {# Delivery line #}
+                      <!-- prettier-ignore -->
+                      {% if invoice.delivery_fee and invoice.delivery_fee|floatformat:2 != '0.00' %}
+                      <tr class="table-warning">
+                        <td>{% trans "Delivery price" %}</td>
+                        <td>—</td>
+                        <td>1</td>
+                        <td>${{ invoice.delivery_fee }}</td>
+                        <td>0%</td>
+                        <td>${{ invoice.delivery_fee }}</td>
+                        <td>${{ invoice.delivery_fee }}</td>
+                      </tr>
+                      {% endif %}
+                    </tbody>
+                  </table>
+                </div>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="8" class="text-center py-4">
+                <i class="fas fa-file-invoice-dollar fa-2x text-muted mb-2"></i>
+                <p class="text-muted mb-0">
+                  {% trans "No invoices created yet" %}
+                </p>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products Section -->
+  <div class="dashboard-section mb-5" data-aos="fade-up">
+    <div
+      class="section-header d-flex justify-content-between align-items-center mb-4"
+    >
+      <h3 class="section-title">
+        <i class="fas fa-box me-2 text-primary"></i>
+        {% trans "Products" %}
+      </h3>
+      <button
+        class="btn btn-primary-modern btn-sm"
+        data-bs-toggle="modal"
+        data-bs-target="#addProductModal"
+      >
+        <i class="fas fa-plus me-1"></i>
+        {% trans "Add Product" %}
+      </button>
+    </div>
+    <div class="modern-card">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>{% trans "Product" %}</th>
+              <th>{% trans "Image" %}</th>
+              <th>{% trans "Available" %}</th>
+              <th>{% trans "Price" %}</th>
+              <th>{% trans "Discount (%)" %}</th>
+              <th>{% trans "Actions" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for product in products %}
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <div class="product-info">
+                    <h6 class="mb-0 fw-semibold">{{ product.name }}</h6>
+                    <small class="text-muted">
+                      {{ product.description|truncatewords:10 }}
+                    </small>
+                  </div>
+                </div>
+              </td>
+              <td>
+                {% if product.image %}
+                <img
+                  src="{{ product.image.url }}"
+                  alt="{{ product.name }}"
+                  class="product-thumbnail"
+                />
+                {% else %}
+                <div class="no-image-placeholder">
+                  <i class="fas fa-image text-muted"></i>
+                </div>
+                {% endif %}
+              </td>
+              <td>
+                <span
+                  class="badge {% if product.quantity_available > 10 %}bg-success{% else %}bg-warning{% endif %}"
+                >
+                  {{ product.quantity_available }}
+                </span>
+              </td>
+              <td>
+                <span class="fw-semibold text-primary"
+                  >${{ product.price|default:"0.00" }}</span
+                >
+              </td>
+              <td>
+                <span class="fw-semibold text-primary"
+                  >${{ product.discount_percentage|default:"0" }}</span
+                >
+              </td>
+              <td>
+                <div class="btn-group btn-group-sm">
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary edit-product-btn mx-1"
+                    title="{% trans 'Edit' %}"
+                    data-product-id="{{ product.id }}"
+                  >
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-danger delete-product-btn mx-1"
+                    title="{% trans 'Delete' %}"
+                    data-product-id="{{ product.id }}"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="5" class="text-center py-4">
+                <i class="fas fa-box-open fa-2x text-muted mb-2"></i>
+                <p class="text-muted mb-0">
+                  {% trans "No products available" %}
+                </p>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="dashboard-section mb-5" data-aos="fade-up">
+    <div
+      class="section-header d-flex justify-content-between align-items-center mb-4"
+    >
+      <h3 class="section-title">
+        <i class="fas fa-images me-2 text-primary"></i>
+        {% trans "Banners" %}
+      </h3>
+      <button
+        class="btn btn-primary-modern btn-sm"
+        data-bs-toggle="modal"
+        data-bs-target="#addBannerModal"
+      >
+        <i class="fas fa-plus me-1"></i>
+        {% trans "Add Banner" %}
+      </button>
+    </div>
+
+    <div class="modern-card">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>{% trans "Title" %}</th>
+              <th>{% trans "Image" %}</th>
+              <th>{% trans "Order" %}</th>
+              <th>{% trans "Active" %}</th>
+              <th>{% trans "Actions" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for banner in banners %}
+            <tr>
+              <td>{{ banner.title }}</td>
+
+              <td>
+                {% if banner.image %}
+                <img src="{{ banner.image.url }}" class="product-thumbnail" />
+                {% else %}
+                <div class="no-image-placeholder">
+                  <i class="fas fa-image text-muted"></i>
+                </div>
+                {% endif %}
+              </td>
+
+              <td>{{ banner.order }}</td>
+
+              <td>
+                <span
+                  class="badge {% if banner.is_active %}bg-success{% else %}bg-danger{% endif %}"
+                >
+                  {{ banner.is_active|yesno:"Active,Inactive" }}
+                </span>
+              </td>
+
+              <td>
+                <div class="btn-group btn-group-sm">
+                  <button
+                    class="btn btn-outline-primary edit-banner-btn mx-1"
+                    data-banner-id="{{ banner.id }}"
+                  >
+                    <i class="fas fa-edit"></i>
+                  </button>
+
+                  <button
+                    class="btn btn-outline-danger delete-banner-btn mx-1"
+                    data-banner-id="{{ banner.id }}"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="5" class="text-center py-4">
+                <i class="fas fa-images fa-2x text-muted mb-2"></i>
+                <p class="text-muted mb-0">
+                  {% trans "No banners available" %}
+                </p>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inquiries Section -->
+  <div class="dashboard-section mb-5" data-aos="fade-up" data-aos-delay="100">
+    <div class="section-header mb-4">
+      <h3 class="section-title">
+        <i class="fas fa-question-circle me-2 text-success"></i>
+        {% trans "Product Inquiries" %}
+      </h3>
+    </div>
+    <div class="modern-card">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>{% trans "User" %}</th>
+              <th>{% trans "Product" %}</th>
+              <th>{% trans "Quantity" %}</th>
+              <th>{% trans "Address" %}</th>
+              <th>{% trans "Date" %}</th>
+              <th>{% trans "Status" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for inquiry in inquiries %}
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <div
+                    class="user-avatar bg-primary text-white rounded-circle me-2"
+                  >
+                    {{ inquiry.user.username|first|upper }}
+                  </div>
+                  <span class="fw-semibold">{{ inquiry.user.username }}</span>
+                </div>
+              </td>
+              <td>{{ inquiry.product.name }}</td>
+              <td>
+                <span class="badge bg-primary">{{ inquiry.quantity }}</span>
+              </td>
+              <td>
+                <span
+                  class="text-truncate d-inline-block"
+                  style="max-width: 150px"
+                  title="{{ inquiry.address }}"
+                  >{{ inquiry.address }}</span
+                >
+              </td>
+              <td>
+                <small class="text-muted"
+                  >{{ inquiry.created_at|date:"M d, Y" }}</small
+                >
+              </td>
+              <td>
+                <span class="badge bg-warning">{% trans "Pending" %}</span>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="6" class="text-center py-4">
+                <i class="fas fa-inbox fa-2x text-muted mb-2"></i>
+                <p class="text-muted mb-0">{% trans "No inquiries yet" %}</p>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Messages Section -->
+  <div class="dashboard-section mb-5" data-aos="fade-up" data-aos-delay="200">
+    <div class="section-header mb-4">
+      <h3 class="section-title">
+        <i class="fas fa-envelope me-2 text-warning"></i>
+        {% trans "Messages" %}
+      </h3>
+    </div>
+    <div class="modern-card">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>{% trans "Email" %}</th>
+              <th>{% trans "Message" %}</th>
+              <th>{% trans "Date" %}</th>
+              <th>{% trans "Actions" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for message in messages %}
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <div
+                    class="user-avatar bg-info text-white rounded-circle me-2"
+                  >
+                    {{ message.email|first|upper }}
+                  </div>
+                  <span class="fw-semibold">{{ message.email }}</span>
+                </div>
+              </td>
+              <td>
+                <span
+                  class="text-truncate d-inline-block"
+                  style="max-width: 200px"
+                  title="{{ message.message }}"
+                  >{{ message.message }}</span
+                >
+              </td>
+              <td>
+                <small class="text-muted"
+                  >{{ message.created_at|date:"M d, Y" }}</small
+                >
+              </td>
+              <td>
+                <button
+                  class="btn btn-outline-primary btn-sm"
+                  title="{% trans 'View' %}"
+                  data-bs-toggle="modal"
+                  data-bs-target="#viewMessageModal"
+                  data-message="{{ message.message }}"
+                  data-email="{{ message.email }}"
+                >
+                  <i class="fas fa-eye"></i>
+                </button>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="4" class="text-center py-4">
+                <i class="fas fa-comments fa-2x text-muted mb-2"></i>
+                <p class="text-muted mb-0">{% trans "No messages yet" %}</p>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Branches Section -->
+  <div class="dashboard-section mb-5" data-aos="fade-up" data-aos-delay="300">
+    <div
+      class="section-header d-flex justify-content-between align-items-center mb-4"
+    >
+      <h3 class="section-title">
+        <i class="fas fa-code-branch me-2 text-info"></i>
+        {% trans "Branches" %}
+      </h3>
+      <button
+        class="btn btn-success-modern btn-sm"
+        data-bs-toggle="modal"
+        data-bs-target="#addBranchModal"
+      >
+        <i class="fas fa-plus me-1"></i>
+        {% trans "Add Branch" %}
+      </button>
+    </div>
+    <div class="modern-card">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>{% trans "Name" %}</th>
+              <th>{% trans "Address" %}</th>
+              <th>{% trans "Coordinates" %}</th>
+              <th>{% trans "Primary" %}</th>
+              <th>{% trans "Actions" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for branch in branches %}
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <i class="fas fa-map-marker-alt text-danger me-2"></i>
+                  <span class="fw-semibold">{{ branch.name }}</span>
+                </div>
+              </td>
+              <td>
+                <span
+                  class="text-truncate d-inline-block"
+                  style="max-width: 200px"
+                  title="{{ branch.address }}"
+                  >{{ branch.address }}</span
+                >
+              </td>
+              <td>
+                <!-- prettier-ignore -->
+                <small class="text-muted">
+                  {% if branch.latitude is not None %}
+                  {{ branch.latitude|floatformat:2 }}
+                  {% else %}
+                  {% trans "Not Set" %}
+                  {% endif %},
+                  {% if branch.longitude is not None %}
+                  {{ branch.longitude|floatformat:2 }}
+                  {% else %}
+                  {% trans "Not Set" %}
+                  {% endif %}
+                </small>
+              </td>
+              <td>
+                {% if branch.primery_branch %}
+                <span class="badge bg-success">{% trans "Yes" %}</span>
+                {% else %}
+                <span class="badge bg-secondary">{% trans "No" %}</span>
+                {% endif %}
+              </td>
+              <td>
+                <div class="btn-group btn-group-sm">
+                  <button
+                    class="btn btn-outline-primary edit-branch-btn mx-1"
+                    title="{% trans 'Edit' %}"
+                    data-branch-id="{{ branch.id }}"
+                  >
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button
+                    class="btn btn-outline-danger delete-branch-btn mx-1"
+                    title="{% trans 'Delete' %}"
+                    data-branch-id="{{ branch.id }}"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="5" class="text-center py-4">
+                <i class="fas fa-store-alt fa-2x text-muted mb-2"></i>
+                <p class="text-muted mb-0">
+                  {% trans "No branches added yet" %}
+                </p>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!-- Cities Section -->
+  <div class="dashboard-section mb-5" data-aos="fade-up" data-aos-delay="350">
+    <div
+      class="section-header d-flex justify-content-between align-items-center mb-4"
+    >
+      <h3 class="section-title">
+        <i class="fas fa-city me-2 text-secondary"></i>
+        {% trans "Cities" %}
+      </h3>
+      <button
+        class="btn btn-secondary btn-sm btn-modern"
+        data-bs-toggle="modal"
+        data-bs-target="#addCityModal"
+      >
+        <i class="fas fa-plus me-1"></i>
+        {% trans "Add City" %}
+      </button>
+    </div>
+
+    <div class="modern-card">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>{% trans "City Name" %}</th>
+              <th>{% trans "Delivery Fee" %}</th>
+              <th>{% trans "Actions" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for city in cities %}
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                  <span class="fw-semibold">{{ city.name }}</span>
+                </div>
+              </td>
+              <td>
+                <span class="fw-semibold text-primary">
+                  {{ city.delivery_fee }} $
+                </span>
+              </td>
+              <td>
+                <div class="btn-group btn-group-sm">
+                  <button
+                    class="btn btn-outline-primary edit-city-btn mx-1"
+                    title="{% trans 'Edit' %}"
+                    data-city-id="{{ city.id }}"
+                    data-city-name="{{ city.name }}"
+                    data-city-fee="{{ city.delivery_fee }}"
+                  >
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button
+                    class="btn btn-outline-danger delete-city-btn mx-1"
+                    title="{% trans 'Delete' %}"
+                    data-city-id="{{ city.id }}"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="3" class="text-center py-4">
+                <i class="fas fa-city fa-2x text-muted mb-2"></i>
+                <p class="text-muted mb-0">{% trans "No cities added yet" %}</p>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Product Modal -->
+<div
+  class="modal fade"
+  id="addProductModal"
+  tabindex="-1"
+  aria-labelledby="addProductModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content modern-modal">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="addProductModalLabel">
+          <i class="fas fa-plus-circle me-2"></i>
+          {% trans "Add New Product" %}
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body p-3 p-md-4">
+        <form id="productFormAdd" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="row g-3">
+            <!-- Name -->
+            <div class="col-md-6">
+              <div class="form-floating">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="productNameAdd"
+                  name="name"
+                  placeholder="{% trans 'Product Name' %}"
+                  required
+                />
+                <label for="productNameAdd">{% trans "Product Name" %}</label>
+              </div>
+            </div>
+
+            <!-- Price -->
+            <div class="col-md-3">
+              <div class="form-floating">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="productPriceAdd"
+                  name="price"
+                  placeholder="{% trans 'Price' %}"
+                  step="0.01"
+                  required
+                />
+                <label for="productPriceAdd">{% trans "Price ($)" %}</label>
+              </div>
+            </div>
+
+            <!-- Discount Percentage -->
+            <div class="col-md-3">
+              <div class="form-floating">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="productDiscountAdd"
+                  name="discount_percentage"
+                  placeholder="{% trans 'Discount %' %}"
+                  step="0.01"
+                  min="0"
+                  max="100"
+                />
+                <label for="productDiscountAdd"
+                  >{% trans "Discount (%)" %}</label
+                >
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="col-12">
+              <div class="form-floating">
+                <textarea
+                  class="form-control"
+                  id="productDescriptionAdd"
+                  name="description"
+                  placeholder="{% trans 'Description' %}"
+                  style="height: 100px"
+                  required
+                ></textarea>
+                <label for="productDescriptionAdd">
+                  {% trans "Description" %}
+                </label>
+              </div>
+            </div>
+
+            <!-- Quantity -->
+            <div class="col-md-6">
+              <div class="form-floating">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="productQuantityAdd"
+                  name="quantity_available"
+                  placeholder="{% trans 'Quantity Available' %}"
+                  required
+                />
+                <label for="productQuantityAdd">
+                  {% trans "Quantity Available" %}
+                </label>
+              </div>
+            </div>
+
+            <!-- Category -->
+            <div class="col-md-6">
+              <div class="form-floating">
+                <select
+                  class="form-select"
+                  id="productCategoryAdd"
+                  name="category"
+                  required
+                >
+                  <option value="">{% trans "Select Category" %}</option>
+                  {% for category in categories %}
+                  <option value="{{ category.id }}">{{ category.name }}</option>
+                  {% endfor %}
+                </select>
+                <label for="productCategoryAdd">{% trans "Category" %}</label>
+              </div>
+            </div>
+
+            <!-- Flags -->
+            <div class="col-md-4">
+              <div class="form-check p-3 border rounded">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="showPriceAdd"
+                  name="show_price"
+                  checked
+                />
+                <label class="form-check-label" for="showPriceAdd">
+                  {% trans "Show Price" %}
+                </label>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-check p-3 border rounded">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="showQuantityAdd"
+                  name="show_quantity"
+                  checked
+                />
+                <label class="form-check-label" for="showQuantityAdd">
+                  {% trans "Show Quantity" %}
+                </label>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-check p-3 border rounded">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="placeOrdersAdd"
+                  name="place_orders"
+                  checked
+                />
+                <label class="form-check-label" for="placeOrdersAdd">
+                  {% trans "Place Orders" %}
+                </label>
+              </div>
+            </div>
+
+            <!-- Multiple Images -->
+            <div class="col-12">
+              <div class="mb-3">
+                <label for="productImagesAdd" class="form-label">
+                  {% trans "Product Images" %}
+                </label>
+                <input
+                  type="file"
+                  class="form-control"
+                  id="productImagesAdd"
+                  name="images"
+                  accept="image/*"
+                  multiple
+                />
+                <div class="form-text">
+                  {% trans "You can select multiple images. The first image will
+                  be used as the main product image." %}
+                </div>
+              </div>
+            </div>
+
+            <!-- Video -->
+            <div class="col-12">
+              <div class="mb-3">
+                <label for="productVideoAdd" class="form-label">
+                  {% trans "Product Video" %}
+                </label>
+                <input
+                  type="file"
+                  class="form-control"
+                  id="productVideoAdd"
+                  name="video"
+                  accept="video/*"
+                />
+                <div class="form-text">
+                  {% trans "Optional - Upload a product video" %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          data-bs-dismiss="modal"
+        >
+          {% trans "Cancel" %}
+        </button>
+        <button type="button" class="btn btn-primary" id="createProductBtn">
+          <i class="fas fa-plus me-2"></i>
+          {% trans "Add Product" %}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Product Modal -->
+<div
+  class="modal fade"
+  id="editProductModal"
+  tabindex="-1"
+  aria-labelledby="editProductModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content modern-modal">
+      <div class="modal-header bg-warning text-white">
+        <h5 class="modal-title" id="editProductModalLabel">
+          <i class="fas fa-edit me-2"></i>
+          {% trans "Edit Product" %}
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body p-3 p-md-4">
+        <form id="productFormEdit" enctype="multipart/form-data">
+          <input type="hidden" id="productIdEdit" />
+          <div class="row g-3">
+            <!-- Name -->
+            <div class="col-md-6">
+              <div class="form-floating">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="productNameEdit"
+                  name="name"
+                  placeholder="{% trans 'Product Name' %}"
+                  required
+                />
+                <label for="productNameEdit">{% trans "Product Name" %}</label>
+              </div>
+            </div>
+
+            <!-- Price -->
+            <div class="col-md-3">
+              <div class="form-floating">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="productPriceEdit"
+                  name="price"
+                  placeholder="{% trans 'Price' %}"
+                  step="0.01"
+                  required
+                />
+                <label for="productPriceEdit">{% trans "Price ($)" %}</label>
+              </div>
+            </div>
+
+            <!-- Discount Percentage -->
+            <div class="col-md-3">
+              <div class="form-floating">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="productDiscountEdit"
+                  name="discount_percentage"
+                  placeholder="{% trans 'Discount %' %}"
+                  step="0.01"
+                  min="0"
+                  max="100"
+                />
+                <label for="productDiscountEdit">
+                  {% trans "Discount (%)" %}
+                </label>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="col-12">
+              <div class="form-floating">
+                <textarea
+                  class="form-control"
+                  id="productDescriptionEdit"
+                  name="description"
+                  placeholder="{% trans 'Description' %}"
+                  style="height: 100px"
+                  required
+                ></textarea>
+                <label for="productDescriptionEdit">
+                  {% trans "Description" %}
+                </label>
+              </div>
+            </div>
+
+            <!-- Quantity -->
+            <div class="col-md-6">
+              <div class="form-floating">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="productQuantityEdit"
+                  name="quantity_available"
+                  placeholder="{% trans 'Quantity Available' %}"
+                  required
+                />
+                <label for="productQuantityEdit">
+                  {% trans "Quantity Available" %}
+                </label>
+              </div>
+            </div>
+
+            <!-- Category -->
+            <div class="col-md-6">
+              <div class="form-floating">
+                <select
+                  class="form-select"
+                  id="productCategoryEdit"
+                  name="category"
+                  required
+                >
+                  <option value="">{% trans "Select Category" %}</option>
+                  {% for category in categories %}
+                  <option value="{{ category.id }}">{{ category.name }}</option>
+                  {% endfor %}
+                </select>
+                <label for="productCategoryEdit">{% trans "Category" %}</label>
+              </div>
+            </div>
+
+            <!-- Flags -->
+            <div class="col-md-4">
+              <div class="form-check p-3 border rounded">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="showPriceEdit"
+                  name="show_price"
+                />
+                <label class="form-check-label" for="showPriceEdit">
+                  {% trans "Show Price" %}
+                </label>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-check p-3 border rounded">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="showQuantityEdit"
+                  name="show_quantity"
+                />
+                <label class="form-check-label" for="showQuantityEdit">
+                  {% trans "Show Quantity" %}
+                </label>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-check p-3 border rounded">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="placeOrdersEdit"
+                  name="place_orders"
+                />
+                <label class="form-check-label" for="placeOrdersEdit">
+                  {% trans "Place Orders" %}
+                </label>
+              </div>
+            </div>
+
+            <!-- Multiple Images (Edit) -->
+            <!-- Multiple Images (Edit) -->
+            <div class="col-12">
+              <div class="mb-3">
+                <label for="productImagesEdit" class="form-label">
+                  {% trans "Product Images" %}
+                </label>
+                <input
+                  type="file"
+                  class="form-control"
+                  id="productImagesEdit"
+                  name="images"
+                  accept="image/*"
+                  multiple
+                />
+                <div class="form-text">
+                  {% trans "Optional - Select images to replace the gallery. The
+                  first one will be used as the main image." %}
+                </div>
+
+                <!-- Main image preview -->
+                <img
+                  id="productImagePreview"
+                  src=""
+                  alt=""
+                  class="mt-2 img-fluid rounded"
+                  style="max-height: 150px; display: none"
+                />
+
+                <!-- Gallery images preview (existing images) -->
+                <div
+                  id="productGalleryPreview"
+                  class="mt-3 d-flex flex-wrap gap-2"
+                  style="display: none"
+                ></div>
+                <div class="form-text">
+                  {% trans "Existing gallery images" %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          data-bs-dismiss="modal"
+        >
+          {% trans "Cancel" %}
+        </button>
+        <button type="button" class="btn btn-warning" id="updateProductBtn">
+          <i class="fas fa-save me-2"></i>
+          {% trans "Update Product" %}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Branch Modal -->
+<div
+  class="modal fade"
+  id="addBranchModal"
+  tabindex="-1"
+  aria-labelledby="addBranchModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content modern-modal">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="addBranchModalLabel">
+          <i class="fas fa-map-marker-alt me-2"></i>
+          {% trans "Add New Branch" %}
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body p-3 p-md-4">
+        <form id="branchFormAdd">
+          {% csrf_token %}
+          <div class="row g-3">
+            <div class="col-12">
+              <div class="form-floating">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="branchNameAdd"
+                  name="name"
+                  placeholder="{% trans 'Branch Name' %}"
+                  required
+                />
+                <label for="branchNameAdd">{% trans "Branch Name" %}</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating">
+                <input
+                  type="tel"
+                  class="form-control"
+                  id="branchPhoneAdd"
+                  name="phone_number"
+                  placeholder="{% trans 'Phone Number' %}"
+                />
+                <label for="branchPhoneAdd">{% trans "Phone Number" %}</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating">
+                <input
+                  type="email"
+                  class="form-control"
+                  id="branchEmailAdd"
+                  name="Email_Adress"
+                  placeholder="{% trans 'Email Address' %}"
+                />
+                <label for="branchEmailAdd">{% trans "Email Address" %}</label>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-floating">
+                <textarea
+                  class="form-control"
+                  id="branchAddressAdd"
+                  name="address"
+                  placeholder="{% trans 'Address' %}"
+                  style="height: 80px"
+                  required
+                ></textarea>
+                <label for="branchAddressAdd">{% trans "Address" %}</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating">
+                <input
+                  type="number"
+                  step="any"
+                  class="form-control"
+                  id="branchLatitudeAdd"
+                  name="latitude"
+                  required
+                  placeholder="{% trans 'Latitude' %}"
+                />
+                <label for="branchLatitudeAdd">{% trans "Latitude" %}</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating">
+                <input
+                  type="number"
+                  step="any"
+                  class="form-control"
+                  id="branchLongitudeAdd"
+                  name="longitude"
+                  required
+                  placeholder="{% trans 'Longitude' %}"
+                />
+                <label for="branchLongitudeAdd">{% trans "Longitude" %}</label>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="primaryBranchAdd"
+                  name="primery_branch"
+                />
+                <label class="form-check-label" for="primaryBranchAdd"
+                  >{% trans "Primary Branch" %}</label
+                >
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          data-bs-dismiss="modal"
+        >
+          {% trans "Cancel" %}
+        </button>
+        <button type="button" class="btn btn-success" id="createBranchBtn">
+          <i class="fas fa-plus me-2"></i>
+          {% trans "Add Branch" %}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Branch Modal -->
+<div
+  class="modal fade"
+  id="editBranchModal"
+  tabindex="-1"
+  aria-labelledby="editBranchModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content modern-modal">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title" id="editBranchModalLabel">
+          <i class="fas fa-edit me-2"></i>
+          {% trans "Edit Branch" %}
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body p-3 p-md-4">
+        <form id="branchFormEdit">
+          <input type="hidden" id="branchIdEdit" />
+          <div class="row g-3">
+            <div class="col-12">
+              <div class="form-floating">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="branchNameEdit"
+                  name="name"
+                  placeholder="{% trans 'Branch Name' %}"
+                  required
+                />
+                <label for="branchNameEdit">{% trans "Branch Name" %}</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating">
+                <input
+                  type="tel"
+                  class="form-control"
+                  id="branchPhoneEdit"
+                  name="phone_number"
+                  placeholder="{% trans 'Phone Number' %}"
+                />
+                <label for="branchPhoneEdit">{% trans "Phone Number" %}</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating">
+                <input
+                  type="email"
+                  class="form-control"
+                  id="branchEmailEdit"
+                  name="Email_Adress"
+                  placeholder="{% trans 'Email Address' %}"
+                />
+                <label for="branchEmailEdit">{% trans "Email Address" %}</label>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-floating">
+                <textarea
+                  class="form-control"
+                  id="branchAddressEdit"
+                  name="address"
+                  placeholder="{% trans 'Address' %}"
+                  style="height: 80px"
+                  required
+                ></textarea>
+                <label for="branchAddressEdit">{% trans "Address" %}</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating">
+                <input
+                  type="number"
+                  step="any"
+                  class="form-control"
+                  id="branchLatitudeEdit"
+                  name="latitude"
+                  required
+                  placeholder="{% trans 'Latitude' %}"
+                />
+                <label for="branchLatitudeEdit">{% trans "Latitude" %}</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating">
+                <input
+                  type="number"
+                  step="any"
+                  class="form-control"
+                  id="branchLongitudeEdit"
+                  name="longitude"
+                  required
+                  placeholder="{% trans 'Longitude' %}"
+                />
+                <label for="branchLongitudeEdit">{% trans "Longitude" %}</label>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="primaryBranchEdit"
+                  name="primery_branch"
+                />
+                <label class="form-check-label" for="primaryBranchEdit"
+                  >{% trans "Primary Branch" %}</label
+                >
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          data-bs-dismiss="modal"
+        >
+          {% trans "Cancel" %}
+        </button>
+        <button type="button" class="btn btn-info" id="updateBranchBtn">
+          <i class="fas fa-save me-2"></i>
+          {% trans "Update Branch" %}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Category Modal -->
+<div
+  class="modal fade"
+  id="addCategoryModal"
+  tabindex="-1"
+  aria-labelledby="addCategoryModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content modern-modal">
+      <div class="modal-header bg-warning text-white">
+        <h5 class="modal-title" id="addCategoryModalLabel">
+          <i class="fas fa-plus me-2"></i>
+          {% trans "Add Category" %}
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body p-3 p-md-4">
+        <form id="categoryFormAdd" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="row g-3">
+            <div class="col-12">
+              <div class="form-floating">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="categoryNameAdd"
+                  name="name"
+                  placeholder="{% trans 'Category Name' %}"
+                  required
+                />
+                <label for="categoryNameAdd">{% trans "Category Name" %}</label>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-floating">
+                <textarea
+                  class="form-control"
+                  id="categoryDescriptionAdd"
+                  name="description"
+                  placeholder="{% trans 'Description' %}"
+                  style="height: 80px"
+                ></textarea>
+                <label for="categoryDescriptionAdd"
+                  >{% trans "Description" %}</label
+                >
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="mb-3">
+                <label for="categoryImageAdd" class="form-label"
+                  >{% trans "Category Image" %}</label
+                >
+                <input
+                  type="file"
+                  class="form-control"
+                  id="categoryImageAdd"
+                  name="image"
+                  accept="image/*"
+                />
+                <div class="form-text">
+                  {% trans "Optional - Upload a category image" %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          data-bs-dismiss="modal"
+        >
+          {% trans "Cancel" %}
+        </button>
+        <button type="button" class="btn btn-warning" id="createCategoryBtn">
+          <i class="fas fa-plus me-2"></i>
+          {% trans "Add Category" %}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Category Modal -->
+<div
+  class="modal fade"
+  id="editCategoryModal"
+  tabindex="-1"
+  aria-labelledby="editCategoryModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content modern-modal">
+      <div class="modal-header bg-warning text-white">
+        <h5 class="modal-title" id="editCategoryModalLabel">
+          <i class="fas fa-edit me-2"></i>
+          {% trans "Edit Category" %}
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body p-3 p-md-4">
+        <form id="categoryFormEdit" enctype="multipart/form-data">
+          <input type="hidden" id="categoryIdEdit" />
+          <div class="row g-3">
+            <div class="col-12">
+              <div class="form-floating">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="categoryNameEdit"
+                  name="name"
+                  placeholder="{% trans 'Category Name' %}"
+                  required
+                />
+                <label for="categoryNameEdit"
+                  >{% trans "Category Name" %}</label
+                >
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-floating">
+                <textarea
+                  class="form-control"
+                  id="categoryDescriptionEdit"
+                  name="description"
+                  placeholder="{% trans 'Description' %}"
+                  style="height: 80px"
+                ></textarea>
+                <label for="categoryDescriptionEdit"
+                  >{% trans "Description" %}</label
+                >
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="mb-3">
+                <label for="categoryImageEdit" class="form-label"
+                  >{% trans "Category Image" %}</label
+                >
+                <input
+                  type="file"
+                  class="form-control"
+                  id="categoryImageEdit"
+                  name="image"
+                  accept="image/*"
+                />
+                <div class="form-text">
+                  {% trans "Optional - Leave empty to keep current image" %}
+                </div>
+                <img
+                  id="categoryImagePreview"
+                  src=""
+                  alt=""
+                  class="mt-2 img-fluid rounded"
+                  style="max-height: 150px; display: none"
+                />
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          data-bs-dismiss="modal"
+        >
+          {% trans "Cancel" %}
+        </button>
+        <button type="button" class="btn btn-warning" id="updateCategoryBtn">
+          <i class="fas fa-save me-2"></i>
+          {% trans "Update Category" %}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add City Modal -->
+<div
+  class="modal fade"
+  id="addCityModal"
+  tabindex="-1"
+  aria-labelledby="addCityModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content modern-modal">
+      <div class="modal-header bg-secondary text-white">
+        <h5 class="modal-title" id="addCityModalLabel">
+          <i class="fas fa-city me-2"></i>
+          {% trans "Add New City" %}
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body p-3 p-md-4">
+        <form id="cityFormAdd">
+          {% csrf_token %}
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="cityNameAdd"
+              name="name"
+              placeholder="{% trans 'City Name' %}"
+              required
+            />
+            <label for="cityNameAdd">{% trans "City Name" %}</label>
+          </div>
+
+          <div class="form-floating mb-3">
+            <input
+              type="number"
+              step="0.01"
+              class="form-control"
+              id="cityDeliveryFeeAdd"
+              name="delivery_fee"
+              placeholder="{% trans 'Delivery Fee' %}"
+              value="0.00"
+              required
+            />
+            <label for="cityDeliveryFeeAdd"
+              >{% trans "Delivery Fee ($)" %}</label
+            >
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          data-bs-dismiss="modal"
+        >
+          {% trans "Cancel" %}
+        </button>
+        <button type="button" class="btn btn-secondary" id="createCityBtn">
+          <i class="fas fa-plus me-2"></i>
+          {% trans "Add City" %}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit City Modal -->
+<div
+  class="modal fade"
+  id="editCityModal"
+  tabindex="-1"
+  aria-labelledby="editCityModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content modern-modal">
+      <div class="modal-header bg-secondary text-white">
+        <h5 class="modal-title" id="editCityModalLabel">
+          <i class="fas fa-edit me-2"></i>
+          {% trans "Edit City" %}
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body p-3 p-md-4">
+        <form id="cityFormEdit">
+          <input type="hidden" id="cityIdEdit" />
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="cityNameEdit"
+              name="name"
+              placeholder="{% trans 'City Name' %}"
+              required
+            />
+            <label for="cityNameEdit">{% trans "City Name" %}</label>
+          </div>
+
+          <div class="form-floating mb-3">
+            <input
+              type="number"
+              step="0.01"
+              class="form-control"
+              id="cityDeliveryFeeEdit"
+              name="delivery_fee"
+              placeholder="{% trans 'Delivery Fee' %}"
+              required
+            />
+            <label for="cityDeliveryFeeEdit"
+              >{% trans "Delivery Fee ($)" %}</label
+            >
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          data-bs-dismiss="modal"
+        >
+          {% trans "Cancel" %}
+        </button>
+        <button type="button" class="btn btn-secondary" id="updateCityBtn">
+          <i class="fas fa-save me-2"></i>
+          {% trans "Update City" %}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View Message Modal -->
+<div
+  class="modal fade"
+  id="viewMessageModal"
+  tabindex="-1"
+  aria-labelledby="viewMessageModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content modern-modal">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title" id="viewMessageModalLabel">
+          <i class="fas fa-envelope me-2"></i>
+          {% trans "Message Details" %}
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body p-3 p-md-4">
+        <div class="mb-3">
+          <label class="form-label fw-bold">{% trans "From:" %}</label>
+          <p id="messageEmail" class="text-muted"></p>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-bold">{% trans "Message:" %}</label>
+          <div
+            id="messageContent"
+            class="border rounded p-3 bg-light"
+            style="min-height: 150px"
+          ></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          data-bs-dismiss="modal"
+        >
+          {% trans "Close" %}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="addBannerModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content modern-modal">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">
+          <i class="fas fa-plus-circle me-2"></i> Add Banner
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+
+      <div class="modal-body p-3">
+        <form id="bannerFormAdd" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="form-floating">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="title"
+                  id="bannerTitleAdd"
+                  required
+                />
+                <label>Title</label>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-floating">
+                <input
+                  type="number"
+                  class="form-control"
+                  name="order"
+                  id="bannerOrderAdd"
+                  value="0"
+                />
+                <label>Order</label>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-floating">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="subtitle"
+                  id="bannerSubtitleAdd"
+                />
+                <label>Subtitle</label>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="form-floating">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="button_text"
+                  id="bannerButtonTextAdd"
+                />
+                <label>Button Text</label>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="form-floating">
+                <input
+                  type="url"
+                  class="form-control"
+                  name="button_link"
+                  id="bannerButtonLinkAdd"
+                />
+                <label>Button Link</label>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="form-floating">
+                <select
+                  class="form-select"
+                  name="text_color"
+                  id="bannerColorAdd"
+                >
+                  <option value="white">White</option>
+                  <option value="black">Black</option>
+                </select>
+                <label>Text Color</label>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="form-check p-3 border rounded">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  name="is_active"
+                  id="bannerActiveAdd"
+                  checked
+                />
+                <label class="form-check-label">Active</label>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Banner Image</label>
+              <input
+                type="file"
+                class="form-control"
+                name="image"
+                accept="image/*"
+                required
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button class="btn btn-primary" id="createBannerBtn">Add Banner</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Banner Modal -->
+<div class="modal fade" id="editBannerModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content modern-modal">
+      <div class="modal-header bg-warning text-white">
+        <h5 class="modal-title">
+          <i class="fas fa-edit me-2"></i> Edit Banner
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+
+      <div class="modal-body p-3 p-md-4">
+        <form id="bannerFormEdit" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="hidden" id="bannerIdEdit" />
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="form-floating">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="title"
+                  id="bannerTitleEdit"
+                  required
+                />
+                <label>Title</label>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-floating">
+                <input
+                  type="number"
+                  class="form-control"
+                  name="order"
+                  id="bannerOrderEdit"
+                />
+                <label>Order</label>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-floating">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="subtitle"
+                  id="bannerSubtitleEdit"
+                />
+                <label>Subtitle</label>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="form-floating">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="button_text"
+                  id="bannerButtonTextEdit"
+                />
+                <label>Button Text</label>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="form-floating">
+                <input
+                  type="url"
+                  class="form-control"
+                  name="button_link"
+                  id="bannerButtonLinkEdit"
+                />
+                <label>Button Link</label>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="form-floating">
+                <select
+                  class="form-select"
+                  name="text_color"
+                  id="bannerColorEdit"
+                >
+                  <option value="white">White</option>
+                  <option value="black">Black</option>
+                </select>
+                <label>Text Color</label>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="form-check p-3 border rounded">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  name="is_active"
+                  id="bannerActiveEdit"
+                />
+                <label class="form-check-label">Active</label>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Banner Image (optional)</label>
+              <input
+                type="file"
+                class="form-control"
+                name="image"
+                id="bannerImageEdit"
+                accept="image/*"
+              />
+              <div class="form-text">Leave empty to keep existing image</div>
+
+              <img
+                id="bannerImagePreview"
+                src=""
+                class="img-fluid rounded mt-2"
+                style="max-height: 150px; display: none"
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button class="btn btn-warning" id="updateBannerBtn">
+          Update Banner
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div
+  class="modal fade"
+  id="confirmModal"
+  tabindex="-1"
+  aria-labelledby="confirmModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content modern-modal">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="confirmModalLabel">
+          <i class="fas fa-exclamation-triangle me-2"></i>
+          {% trans "Confirm Action" %}
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body p-3 p-md-4">
+        <p id="confirmMessage">
+          {% trans "Are you sure you want to perform this action?" %}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          data-bs-dismiss="modal"
+        >
+          {% trans "Cancel" %}
+        </button>
+        <button type="button" class="btn btn-danger" id="confirmActionBtn">
+          <i class="fas fa-check me-2"></i>
+          {% trans "Confirm" %}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const dashboardManager = {
+      csrfToken: document.querySelector("[name=csrfmiddlewaretoken]")?.value,
+
+      init() {
+        this.bindEvents();
+        console.log("Dashboard Manager initialized");
+      },
+
+      bindEvents() {
+        // Product buttons
+        document
+          .getElementById("createProductBtn")
+          ?.addEventListener("click", () => this.createProduct());
+        document
+          .getElementById("updateProductBtn")
+          ?.addEventListener("click", () => this.updateProduct());
+
+        // Branch buttons
+        document
+          .getElementById("createBranchBtn")
+          ?.addEventListener("click", () => this.createBranch());
+        document
+          .getElementById("updateBranchBtn")
+          ?.addEventListener("click", () => this.updateBranch());
+
+        // Category buttons
+        document
+          .getElementById("createCategoryBtn")
+          ?.addEventListener("click", () => this.createCategory());
+        document
+          .getElementById("updateCategoryBtn")
+          ?.addEventListener("click", () => this.updateCategory());
+
+        // City buttons
+        document
+          .getElementById("createCityBtn")
+          ?.addEventListener("click", () => this.createCity());
+        document
+          .getElementById("updateCityBtn")
+          ?.addEventListener("click", () => this.updateCity());
+
+        // Table actions using event delegation
+        document.addEventListener("click", (e) => {
+          // Edit product
+          if (e.target.closest(".edit-product-btn")) {
+            const btn = e.target.closest(".edit-product-btn");
+            this.loadProduct(btn.dataset.productId);
+          }
+
+          // Delete product
+          if (e.target.closest(".delete-product-btn")) {
+            const btn = e.target.closest(".delete-product-btn");
+            this.confirmDelete("product", btn.dataset.productId, btn);
+          }
+
+          // Edit branch
+          if (e.target.closest(".edit-branch-btn")) {
+            const btn = e.target.closest(".edit-branch-btn");
+            this.loadBranch(btn.dataset.branchId);
+          }
+
+          // Delete branch
+          if (e.target.closest(".delete-branch-btn")) {
+            const btn = e.target.closest(".delete-branch-btn");
+            this.confirmDelete("branch", btn.dataset.branchId, btn);
+          }
+
+          // Edit category
+          if (e.target.closest(".edit-category-btn")) {
+            const btn = e.target.closest(".edit-category-btn");
+            this.loadCategory(btn);
+          }
+
+          // Delete category
+          if (e.target.closest(".delete-category-btn")) {
+            const btn = e.target.closest(".delete-category-btn");
+            this.confirmDelete("category", btn.dataset.categoryId, btn);
+          }
+
+          // Edit city
+          if (e.target.closest(".edit-city-btn")) {
+            const btn = e.target.closest(".edit-city-btn");
+            this.loadCity(btn.dataset.cityId);
+          }
+
+          // Delete city
+          if (e.target.closest(".delete-city-btn")) {
+            const btn = e.target.closest(".delete-city-btn");
+            this.confirmDelete("city", btn.dataset.cityId, btn);
+          }
+
+          // View message
+          if (e.target.closest('[data-bs-target="#viewMessageModal"]')) {
+            const btn = e.target.closest(
+              '[data-bs-target="#viewMessageModal"]'
+            );
+            this.viewMessage(btn.dataset.message, btn.dataset.email);
+          }
+        });
+
+        // View message modal
+        const viewMessageModal = document.getElementById("viewMessageModal");
+        if (viewMessageModal) {
+          viewMessageModal.addEventListener("show.bs.modal", (e) => {
+            if (e.relatedTarget) {
+              const button = e.relatedTarget;
+              this.viewMessage(button.dataset.message, button.dataset.email);
+            }
+          });
+        }
+
+        // Confirm modal
+        const confirmModal = document.getElementById("confirmModal");
+        if (confirmModal) {
+          confirmModal.addEventListener("hidden.bs.modal", () => {
+            this.confirmAction = null;
+            this.confirmCallback = null;
+          });
+        }
+      },
+
+      // API Methods
+      async apiRequest(url, options = {}) {
+        const { method = "GET", body = null, isFormData = false } = options;
+
+        const headers = {
+          "X-CSRFToken": this.csrfToken,
+        };
+
+        if (!isFormData && body && !(body instanceof FormData)) {
+          headers["Content-Type"] = "application/json";
+        }
+
+        const config = {
+          method,
+          headers,
+          credentials: "same-origin",
+        };
+
+        if (body) {
+          config.body = isFormData ? body : JSON.stringify(body);
+        }
+
+        try {
+          const response = await fetch(url, config);
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(
+              data.error || data.message || `HTTP ${response.status}`
+            );
+          }
+
+          return data;
+        } catch (error) {
+          console.error("API Error:", error);
+          throw error;
+        }
+      },
+
+      // Alert System
+      showAlert(message, type = "success") {
+        // Remove existing alerts
+        const existingAlert = document.querySelector(".dashboard-alert");
+        if (existingAlert) {
+          existingAlert.remove();
+        }
+
+        const alertDiv = document.createElement("div");
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show dashboard-alert`;
+        alertDiv.style.cssText =
+          "position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; min-width: 300px; max-width: 500px;";
+
+        alertDiv.innerHTML = `
+          <div class="d-flex align-items-center">
+            <i class="fas fa-${
+              type === "success" ? "check-circle" : "exclamation-triangle"
+            } me-2"></i>
+            <div>${message}</div>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+
+        document.body.appendChild(alertDiv);
+
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+          if (alertDiv.parentNode) {
+            alertDiv.remove();
+          }
+        }, 5000);
+      },
+
+      // Loading states
+      setLoading(button, isLoading) {
+        if (!button) return;
+
+        if (isLoading) {
+          button.disabled = true;
+          if (!button.dataset.originalHtml) {
+            button.dataset.originalHtml = button.innerHTML;
+          }
+          button.innerHTML =
+            '<span class="spinner-border spinner-border-sm me-2"></span>Processing...';
+        } else {
+          button.disabled = false;
+          button.innerHTML = button.dataset.originalHtml || button.innerHTML;
+        }
+      },
+
+      // Form handling
+      serializeForm(formId) {
+        const form = document.getElementById(formId);
+        if (!form) return {};
+
+        const formData = new FormData(form);
+        const data = {};
+
+        formData.forEach((value, key) => {
+          if (key === "image" || key === "video") return; // Skip files
+
+          // Handle checkboxes
+          if (form.elements[key]?.type === "checkbox") {
+            data[key] = form.elements[key].checked;
+          } else {
+            data[key] = value;
+          }
+        });
+
+        return data;
+      },
+
+      // Product Methods
+      async createProduct() {
+        const btn = document.getElementById("createProductBtn");
+        const form = document.getElementById("productFormAdd");
+
+        if (!form.checkValidity()) {
+          form.classList.add("was-validated");
+          return;
+        }
+
+        this.setLoading(btn, true);
+
+        try {
+          const formData = new FormData(form);
+
+          // Convert checkboxes properly
+          ["show_price", "show_quantity", "place_orders"].forEach((field) => {
+            const checkbox = form.querySelector(`[name="${field}"]`);
+            if (checkbox) {
+              formData.set(field, checkbox.checked ? "true" : "false");
+            }
+          });
+
+          const data = await this.apiRequest('{% url "create_product" %}', {
+            method: "POST",
+            body: formData,
+            isFormData: true,
+          });
+
+          this.showAlert("Product created successfully!", "success");
+          setTimeout(() => location.reload(), 1500);
+        } catch (error) {
+          this.showAlert(`Error: ${error.message}`, "error");
+        } finally {
+          this.setLoading(btn, false);
+        }
+      },
+
+      async loadProduct(productId) {
+        try {
+          const data = await this.apiRequest(`/products/api/${productId}/`);
+
+          // Fill form
+          document.getElementById("productIdEdit").value = data.id;
+          document.getElementById("productNameEdit").value = data.name || "";
+          document.getElementById("productDescriptionEdit").value =
+            data.description || "";
+          document.getElementById("productQuantityEdit").value =
+            data.quantity_available || "";
+          document.getElementById("productPriceEdit").value = data.price || "";
+          document.getElementById("productCategoryEdit").value =
+            data.category?.id || "";
+
+          // Set checkboxes
+          document.getElementById("showPriceEdit").checked =
+            data.show_price || false;
+          document.getElementById("showQuantityEdit").checked =
+            data.show_quantity || false;
+          document.getElementById("placeOrdersEdit").checked =
+            data.place_orders || false;
+
+          // Show image preview if exists
+          const preview = document.getElementById("productImagePreview");
+          if (data.image_url) {
+            preview.src = data.image_url;
+            preview.style.display = "block";
+          } else {
+            preview.style.display = "none";
+          }
+
+          // Show modal
+          const modal = new bootstrap.Modal(
+            document.getElementById("editProductModal")
+          );
+          modal.show();
+        } catch (error) {
+          this.showAlert("Failed to load product data", "error");
+        }
+      },
+
+      async updateProduct() {
+        const btn = document.getElementById("updateProductBtn");
+        const form = document.getElementById("productFormEdit");
+        const productId = document.getElementById("productIdEdit").value;
+
+        if (!form.checkValidity()) {
+          form.classList.add("was-validated");
+          return;
+        }
+
+        this.setLoading(btn, true);
+
+        try {
+          const formData = new FormData(form);
+
+          // Convert checkboxes properly
+          ["show_price", "show_quantity", "place_orders"].forEach((field) => {
+            const checkbox = form.querySelector(`[name="${field}"]`);
+            if (checkbox) {
+              formData.set(field, checkbox.checked ? "true" : "false");
+            }
+          });
+
+          const data = await this.apiRequest(`/products/api/${productId}/`, {
+            method: "POST",
+            body: formData,
+            isFormData: true,
+          });
+
+          this.showAlert("Product updated successfully!", "success");
+          setTimeout(() => location.reload(), 1500);
+        } catch (error) {
+          this.showAlert(`Error: ${error.message}`, "error");
+        } finally {
+          this.setLoading(btn, false);
+        }
+      },
+
+      // Branch Methods
+      async createBranch() {
+        const btn = document.getElementById("createBranchBtn");
+        const form = document.getElementById("branchFormAdd");
+
+        if (!form.checkValidity()) {
+          form.classList.add("was-validated");
+          return;
+        }
+
+        this.setLoading(btn, true);
+
+        try {
+          const data = await this.apiRequest('{% url "create_branch" %}', {
+            method: "POST",
+            body: this.serializeForm("branchFormAdd"),
+          });
+
+          this.showAlert("Branch created successfully!", "success");
+          setTimeout(() => location.reload(), 1500);
+        } catch (error) {
+          this.showAlert(`Error: ${error.message}`, "error");
+        } finally {
+          this.setLoading(btn, false);
+        }
+      },
+
+      async loadBranch(branchId) {
+        try {
+          const data = await this.apiRequest(`/branches/api/${branchId}/`);
+
+          // Fill form
+          document.getElementById("branchIdEdit").value = data.id;
+          document.getElementById("branchNameEdit").value = data.name || "";
+          document.getElementById("branchPhoneEdit").value =
+            data.phone_number || "";
+          document.getElementById("branchEmailEdit").value =
+            data.Email_Adress || "";
+          document.getElementById("branchAddressEdit").value =
+            data.address || "";
+          document.getElementById("branchLatitudeEdit").value =
+            data.latitude || "";
+          document.getElementById("branchLongitudeEdit").value =
+            data.longitude || "";
+          document.getElementById("primaryBranchEdit").checked =
+            data.primery_branch || false;
+
+          // Show modal
+          const modal = new bootstrap.Modal(
+            document.getElementById("editBranchModal")
+          );
+          modal.show();
+        } catch (error) {
+          this.showAlert("Failed to load branch data", "error");
+        }
+      },
+
+      async updateBranch() {
+        const btn = document.getElementById("updateBranchBtn");
+        const form = document.getElementById("branchFormEdit");
+        const branchId = document.getElementById("branchIdEdit").value;
+
+        if (!form.checkValidity()) {
+          form.classList.add("was-validated");
+          return;
+        }
+
+        this.setLoading(btn, true);
+
+        try {
+          const formData = new FormData(form);
+
+          // handle primery_branch checkbox explicitly
+          const primaryCheckbox = form.querySelector('[name="primery_branch"]');
+          if (primaryCheckbox) {
+            if (primaryCheckbox.checked) {
+              // "on" is already fine for your view, but we can be explicit
+              formData.set("primery_branch", "true");
+            } else {
+              formData.set("primery_branch", "false");
+            }
+          }
+
+          const data = await this.apiRequest(`/branches/api/${branchId}/`, {
+            method: "POST",
+            body: formData,
+            isFormData: true,
+          });
+
+          this.showAlert("Branch updated successfully!", "success");
+          setTimeout(() => location.reload(), 1500);
+        } catch (error) {
+          this.showAlert(`Error: ${error.message}`, "error");
+        } finally {
+          this.setLoading(btn, false);
+        }
+      },
+      // Category Methods
+      async createCategory() {
+        const btn = document.getElementById("createCategoryBtn");
+        const form = document.getElementById("categoryFormAdd");
+
+        if (!form.checkValidity()) {
+          form.classList.add("was-validated");
+          return;
+        }
+
+        this.setLoading(btn, true);
+
+        try {
+          const formData = new FormData(form);
+
+          const data = await this.apiRequest('{% url "category_add" %}', {
+            method: "POST",
+            body: formData,
+            isFormData: true,
+          });
+
+          this.showAlert("Category created successfully!", "success");
+          setTimeout(() => location.reload(), 1500);
+        } catch (error) {
+          this.showAlert(`Error: ${error.message}`, "error");
+        } finally {
+          this.setLoading(btn, false);
+        }
+      },
+
+      loadCategory(button) {
+        const categoryId = button.dataset.categoryId;
+        const categoryName = button.dataset.categoryName;
+        const categoryDescription = button.dataset.categoryDescription;
+        const categoryImage = button.dataset.categoryImage;
+
+        // Fill form
+        document.getElementById("categoryIdEdit").value = categoryId;
+        document.getElementById("categoryNameEdit").value = categoryName || "";
+        document.getElementById("categoryDescriptionEdit").value =
+          categoryDescription || "";
+
+        // Show image preview if exists
+        const preview = document.getElementById("categoryImagePreview");
+        if (categoryImage) {
+          preview.src = categoryImage;
+          preview.style.display = "block";
+        } else {
+          preview.style.display = "none";
+        }
+
+        // Show modal
+        const modal = new bootstrap.Modal(
+          document.getElementById("editCategoryModal")
+        );
+        modal.show();
+      },
+
+      async updateCategory() {
+        const btn = document.getElementById("updateCategoryBtn");
+        const form = document.getElementById("categoryFormEdit");
+        const categoryId = document.getElementById("categoryIdEdit").value;
+
+        if (!form.checkValidity()) {
+          form.classList.add("was-validated");
+          return;
+        }
+
+        this.setLoading(btn, true);
+
+        try {
+          const formData = new FormData(form);
+
+          // Build URL from Django reverse so it always matches
+          const url = "{% url 'category_update' 0 %}".replace("0", categoryId);
+
+          const data = await this.apiRequest(url, {
+            method: "POST", // 🔥 changed from PATCH to POST
+            body: formData,
+            isFormData: true,
+          });
+
+          if (data.success) {
+            this.showAlert("Category updated successfully!", "success");
+            setTimeout(() => location.reload(), 1500);
+          } else {
+            this.showAlert(data.error || "Failed to update category", "danger");
+          }
+        } catch (error) {
+          this.showAlert(`Error: ${error.message}`, "danger");
+        } finally {
+          this.setLoading(btn, false);
+        }
+      },
+      // City Methods
+      async createCity() {
+        const btn = document.getElementById("createCityBtn");
+        const form = document.getElementById("cityFormAdd");
+
+        if (!form.checkValidity()) {
+          form.classList.add("was-validated");
+          return;
+        }
+
+        this.setLoading(btn, true);
+
+        try {
+          const payload = this.serializeForm("cityFormAdd"); // { name, delivery_fee }
+
+          const data = await this.apiRequest('{% url "create_city" %}', {
+            method: "POST",
+            body: payload,
+          });
+
+          if (data.success) {
+            this.showAlert("City created successfully!", "success");
+            setTimeout(() => location.reload(), 1500);
+          } else {
+            this.showAlert(data.error || "Failed to create city", "error");
+          }
+        } catch (error) {
+          this.showAlert(`Error: ${error.message}`, "error");
+        } finally {
+          this.setLoading(btn, false);
+        }
+      },
+
+      async loadCity(cityId) {
+        try {
+          const data = await this.apiRequest(`/cities/api/${cityId}/`);
+
+          document.getElementById("cityIdEdit").value = data.id;
+          document.getElementById("cityNameEdit").value = data.name || "";
+          document.getElementById("cityDeliveryFeeEdit").value =
+            data.delivery_fee ?? "0.00";
+
+          const modal = new bootstrap.Modal(
+            document.getElementById("editCityModal")
+          );
+          modal.show();
+        } catch (error) {
+          this.showAlert("Failed to load city data", "error");
+        }
+      },
+
+      async updateCity() {
+        const btn = document.getElementById("updateCityBtn");
+        const form = document.getElementById("cityFormEdit");
+        const cityId = document.getElementById("cityIdEdit").value;
+
+        if (!form.checkValidity()) {
+          form.classList.add("was-validated");
+          return;
+        }
+
+        this.setLoading(btn, true);
+
+        try {
+          const payload = this.serializeForm("cityFormEdit"); // { name, delivery_fee }
+
+          const url = "{% url 'city_detail_api' 0 %}".replace("0", cityId);
+
+          const data = await this.apiRequest(url, {
+            method: "POST",
+            body: payload,
+          });
+
+          if (data.success) {
+            this.showAlert("City updated successfully!", "success");
+            setTimeout(() => location.reload(), 1500);
+          } else {
+            this.showAlert(data.error || "Failed to update city", "error");
+          }
+        } catch (error) {
+          this.showAlert(`Error: ${error.message}`, "error");
+        } finally {
+          this.setLoading(btn, false);
+        }
+      },
+
+      // Message Methods
+      viewMessage(message, email) {
+        document.getElementById("messageEmail").textContent = email;
+        document.getElementById("messageContent").textContent = message;
+      },
+
+      // Confirmation System
+      confirmAction: null,
+      confirmCallback: null,
+
+      confirmDelete(type, id, button) {
+        this.confirmAction = { type, id, button };
+
+        const messages = {
+          product: "Are you sure you want to delete this product?",
+          branch: "Are you sure you want to delete this branch?",
+          category: "Are you sure you want to delete this category?",
+          city: "Are you sure you want to delete this city?",
+        };
+
+        document.getElementById("confirmMessage").textContent =
+          messages[type] || "Are you sure?";
+
+        const modal = new bootstrap.Modal(
+          document.getElementById("confirmModal")
+        );
+        modal.show();
+
+        // Set up callback
+        const confirmBtn = document.getElementById("confirmActionBtn");
+        confirmBtn.onclick = () => this.performDelete();
+      },
+
+      async performDelete() {
+        const { type, id, button } = this.confirmAction;
+
+        try {
+          let url, data;
+
+          switch (type) {
+            case "product":
+              url = `/products/api/${id}/delete/`;
+              data = await this.apiRequest(url, { method: "POST" });
+              break;
+            case "branch":
+              url = "{% url 'branch_delete_api' 0 %}".replace("0", id);
+              data = await this.apiRequest(url, { method: "POST" });
+              break;
+            case "category":
+              url = `/api/category/${id}/delete/`;
+              data = await this.apiRequest(url, { method: "POST" });
+              break;
+            case "city":
+              url = "{% url 'city_delete_api' 0 %}".replace("0", id);
+              data = await this.apiRequest(url, { method: "POST" });
+              break;
+          }
+
+          if (data.success) {
+            this.showAlert(
+              `${
+                type.charAt(0).toUpperCase() + type.slice(1)
+              } deleted successfully!`,
+              "success"
+            );
+
+            // Remove row from table
+            const row = button.closest("tr");
+            if (row) {
+              row.remove();
+
+              // Update stats
+              const statCard = document.querySelector(
+                `.stats-card.bg-${
+                  type === "product"
+                    ? "primary"
+                    : type === "branch"
+                    ? "info"
+                    : "warning"
+                } .stats-number`
+              );
+              if (statCard) {
+                const current = parseInt(statCard.textContent);
+                statCard.textContent = current - 1;
+              }
+            }
+          }
+
+          // Close modal
+          bootstrap.Modal.getInstance(
+            document.getElementById("confirmModal")
+          ).hide();
+        } catch (error) {
+          this.showAlert(`Error: ${error.message}`, "error");
+        }
+      },
+    };
+
+    // Initialize dashboard manager
+    dashboardManager.init();
+
+    // Initialize Bootstrap tooltips
+    const tooltipTriggerList = [].slice.call(
+      document.querySelectorAll("[title]")
+    );
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl, {
+        trigger: "hover",
+      });
+    });
+
+    // Form validation
+    const forms = document.querySelectorAll(".needs-validation");
+    Array.from(forms).forEach((form) => {
+      form.addEventListener(
+        "submit",
+        (event) => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add("was-validated");
+        },
+        false
+      );
+    });
+
+    // Responsive table adjustments
+    function adjustTableForMobile() {
+      const tables = document.querySelectorAll(".table-responsive");
+      tables.forEach((table) => {
+        if (window.innerWidth < 768) {
+          table.classList.add("table-sm");
+        } else {
+          table.classList.remove("table-sm");
+        }
+      });
+    }
+
+    // Initial adjustment
+    adjustTableForMobile();
+
+    // Adjust on resize
+    window.addEventListener("resize", adjustTableForMobile);
+  });
+  document.addEventListener("DOMContentLoaded", () => {
+    const bannerManager = {
+      csrfToken: document.querySelector("[name=csrfmiddlewaretoken]")?.value,
+      confirmData: null,
+
+      init() {
+        this.bind();
+        console.log("Banner Manager initialized");
+      },
+
+      bind() {
+        // Buttons
+        this.onClick("createBannerBtn", () => this.createBanner());
+        this.onClick("updateBannerBtn", () => this.updateBanner());
+
+        // Delegated table actions for banners
+        document.addEventListener("click", (e) => {
+          const editBtn = e.target.closest(".edit-banner-btn");
+          if (editBtn) {
+            const id = editBtn.dataset.bannerId;
+            this.loadBanner(id);
+            return;
+          }
+
+          const deleteBtn = e.target.closest(".delete-banner-btn");
+          if (deleteBtn) {
+            const id = deleteBtn.dataset.bannerId;
+            this.confirmDelete(id, deleteBtn);
+            return;
+          }
+        });
+
+        // Confirm modal reset
+        const confirmModal = document.getElementById("confirmModal");
+        confirmModal?.addEventListener("hidden.bs.modal", () => {
+          this.confirmData = null;
+        });
+      },
+
+      onClick(id, fn) {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener("click", fn);
+      },
+
+      async api(url, method = "GET", body = null, isForm = false) {
+        const headers = { "X-CSRFToken": this.csrfToken };
+
+        if (!isForm && body && !(body instanceof FormData)) {
+          headers["Content-Type"] = "application/json";
+        }
+
+        const res = await fetch(url, {
+          method,
+          headers,
+          body: body ? (isForm ? body : JSON.stringify(body)) : null,
+          credentials: "same-origin",
+        });
+
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          throw new Error(data.error || data.detail || data.message || "Error");
+        }
+
+        return data;
+      },
+
+      alert(msg, type = "success") {
+        document.querySelector(".dashboard-alert")?.remove();
+
+        const box = document.createElement("div");
+        box.className = `alert alert-${type} alert-dismissible fade show dashboard-alert`;
+        box.style.cssText = `
+          position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
+          z-index:9999; min-width:300px; max-width:400px;
+        `;
+        box.innerHTML = `
+          <div class="d-flex align-items-center">
+            <i class="fas fa-${
+              type === "success" ? "check-circle" : "exclamation-triangle"
+            } me-2"></i>
+            <div>${msg}</div>
+          </div>
+          <button class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+        document.body.appendChild(box);
+        setTimeout(() => box.remove(), 4000);
+      },
+
+      // ===== BANNER METHODS =====
+
+      async createBanner() {
+        const btn = document.getElementById("createBannerBtn");
+        const form = document.getElementById("bannerFormAdd");
+        if (!form.checkValidity()) {
+          form.classList.add("was-validated");
+          return;
+        }
+
+        btn.disabled = true;
+
+        try {
+          const fd = new FormData(form);
+          await this.api("{% url 'banner_add' %}", "POST", fd, true);
+
+          this.alert("Banner created!");
+          setTimeout(() => location.reload(), 1200);
+        } catch (e) {
+          this.alert(e.message, "danger");
+        }
+
+        btn.disabled = false;
+      },
+
+      async loadBanner(id) {
+        try {
+          const data = await this.api(`/banners/api/${id}/`, "GET");
+
+          document.getElementById("bannerIdEdit").value = data.id;
+          document.getElementById("bannerTitleEdit").value = data.title || "";
+          document.getElementById("bannerSubtitleEdit").value =
+            data.subtitle || "";
+          document.getElementById("bannerButtonTextEdit").value =
+            data.button_text || "";
+          document.getElementById("bannerButtonLinkEdit").value =
+            data.button_link || "";
+          document.getElementById("bannerColorEdit").value =
+            data.text_color || "white";
+          document.getElementById("bannerOrderEdit").value =
+            data.order !== undefined && data.order !== null ? data.order : 0;
+          document.getElementById("bannerActiveEdit").checked =
+            !!data.is_active;
+
+          // Show image preview
+          const preview = document.getElementById("bannerImagePreview");
+          if (data.image_url) {
+            preview.src = data.image_url;
+            preview.style.display = "block";
+          } else {
+            preview.style.display = "none";
+          }
+
+          const modalEl = document.getElementById("editBannerModal");
+          const modal = new bootstrap.Modal(modalEl);
+          modal.show();
+        } catch (e) {
+          this.alert("Failed to load banner", "danger");
+        }
+      },
+
+      async updateBanner() {
+        const btn = document.getElementById("updateBannerBtn");
+        const form = document.getElementById("bannerFormEdit");
+        const id = document.getElementById("bannerIdEdit").value;
+
+        if (!form.checkValidity()) {
+          form.classList.add("was-validated");
+          return;
+        }
+
+        btn.disabled = true;
+
+        try {
+          const fd = new FormData(form);
+          await this.api(`/banners/api/${id}/`, "POST", fd, true);
+
+          this.alert("Banner updated!");
+          setTimeout(() => location.reload(), 1200);
+        } catch (e) {
+          this.alert(e.message, "danger");
+        }
+
+        btn.disabled = false;
+      },
+
+      confirmDelete(id, btn) {
+        this.confirmData = { id, btn };
+        document.getElementById("confirmMessage").textContent =
+          "Delete this banner?";
+
+        const modalEl = document.getElementById("confirmModal");
+        const modal = new bootstrap.Modal(modalEl);
+        modal.show();
+
+        document.getElementById("confirmActionBtn").onclick = () =>
+          this.deleteBanner();
+      },
+
+      async deleteBanner() {
+        if (!this.confirmData) return;
+        const { id, btn } = this.confirmData;
+
+        try {
+          // Use Django URL reverse and replace the dummy id
+          const url = "{% url 'banner_delete_api' 0 %}".replace("0", id);
+
+          const res = await this.api(url, "POST"); // 🔥 use POST (matches view)
+          if (res.success) {
+            btn.closest("tr")?.remove();
+            this.alert("Banner deleted", "success");
+          }
+
+          const modalEl = document.getElementById("confirmModal");
+          const modal = bootstrap.Modal.getInstance(modalEl);
+          modal.hide();
+        } catch (e) {
+          this.alert(e.message, "danger");
+        }
+      },
+    };
+
+    bannerManager.init();
+  });
+</script>
+
+<style>
+  /* Dashboard Container */
+  .dashboard-container {
+    padding: 1rem;
+    min-height: 100vh;
+  }
+
+  /* Stats Cards - Mobile Responsive */
+  .stats-card {
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    margin-bottom: 1rem;
+  }
+
+  .stats-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .stats-icon {
+    font-size: 1.5rem;
+    margin-right: 0.75rem;
+    opacity: 0.9;
+  }
+
+  .stats-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+
+  .stats-label {
+    font-size: 0.8rem;
+    opacity: 0.9;
+    margin-bottom: 0;
+  }
+
+  /* Section Headers */
+  .section-header {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--card-border-color, #dee2e6);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0;
+  }
+
+  /* Tables - Mobile Responsive */
+  .modern-card {
+    background: var(--card-bg, #fff);
+    border-radius: 12px;
+    border: 1px solid var(--card-border-color, #dee2e6);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table {
+    margin-bottom: 0;
+    width: 100%;
+  }
+
+  .table th {
+    white-space: nowrap;
+    font-size: 0.875rem;
+  }
+
+  .table td {
+    vertical-align: middle;
+    padding: 0.75rem;
+  }
+
+  /* Mobile-specific table adjustments */
+  @media (max-width: 767.98px) {
+    .table td,
+    .table th {
+      padding: 0.5rem;
+      font-size: 0.875rem;
+    }
+
+    .table .btn-group-sm .btn {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+    }
+
+    .product-thumbnail {
+      width: 40px;
+      height: 40px;
+    }
+
+    .user-avatar {
+      width: 30px;
+      height: 30px;
+      font-size: 0.75rem;
+    }
+
+    .text-truncate {
+      max-width: 100px !important;
+    }
+  }
+
+  /* Product Thumbnail */
+  .product-thumbnail {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--card-border-color, #dee2e6);
+  }
+
+  .no-image-placeholder {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    background: var(--card-bg, #f8f9fa);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed var(--card-border-color, #dee2e6);
+    color: var(--text-muted, #6c757d);
+  }
+
+  /* User Avatar */
+  .user-avatar {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+
+  /* Buttons */
+  .btn-modern {
+    transition: all 0.3s ease;
+    border-radius: 8px;
+  }
+
+  .btn-modern:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .btn-primary-modern {
+    background: linear-gradient(135deg, var(--primary, #0d6efd), #0a58ca);
+    border: none;
+    color: white;
+  }
+
+  .btn-success-modern {
+    background: linear-gradient(135deg, var(--success, #198754), #146c43);
+    border: none;
+    color: white;
+  }
+
+  .btn-warning-modern {
+    background: linear-gradient(135deg, var(--warning, #ffc107), #e0a800);
+    border: none;
+    color: white;
+  }
+
+  /* Modals - Mobile Responsive */
+  .modal-dialog {
+    margin: 0.5rem;
+  }
+
+  .modal-content {
+    border-radius: 12px;
+    border: 1px solid var(--card-border-color, #dee2e6);
+  }
+
+  .modal-header {
+    border-radius: 12px 12px 0 0;
+    padding: 1rem;
+  }
+
+  .modal-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .modal-body {
+    padding: 1rem;
+    max-height: 70vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .modal-footer {
+    padding: 1rem;
+    border-top: 1px solid var(--card-border-color, #dee2e6);
+  }
+
+  /* Form Elements */
+  .form-floating {
+    margin-bottom: 1rem;
+  }
+
+  .form-floating > .form-control,
+  .form-floating > .form-select {
+    height: calc(3.5rem + 2px);
+    min-height: calc(3.5rem + 2px);
+  }
+
+  .form-floating > label {
+    padding: 1rem 0.75rem;
+  }
+
+  /* Checkbox and Radio styling */
+  .form-check {
+    margin-bottom: 0.5rem;
+  }
+
+  /* Badges */
+  .badge {
+    font-size: 0.75em;
+    padding: 0.35em 0.65em;
+    font-weight: 600;
+  }
+
+  /* Alert Styling */
+  .dashboard-alert {
+    /* positioning is now handled inline in JS */
+    z-index: 9999;
+    min-width: 280px;
+    max-width: 400px;
+    border-radius: 8px;
+    animation: fadeInScale 0.25s ease;
+  }
+
+  @keyframes fadeInScale {
+    from {
+      transform: translate(-50%, -50%) scale(0.9);
+      opacity: 0;
+    }
+    to {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+  }
+
+  /* Mobile-specific styles */
+  @media (max-width: 767.98px) {
+    /* Dashboard header */
+    .dashboard-header .row {
+      flex-direction: column;
+    }
+
+    .dashboard-header .text-md-end {
+      text-align: left !important;
+      margin-top: 1rem;
+    }
+
+    .dashboard-header .d-flex {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .dashboard-header .btn {
+      width: 100%;
+    }
+
+    /* Stats cards */
+    .stats-card {
+      padding: 0.75rem;
+    }
+
+    .stats-icon {
+      font-size: 1.25rem;
+      margin-right: 0.5rem;
+    }
+
+    .stats-number {
+      font-size: 1.25rem;
+    }
+
+    /* Section headers */
+    .section-header {
+      flex-direction: column;
+      align-items: flex-start !important;
+      gap: 0.5rem;
+    }
+
+    .section-header .btn {
+      align-self: stretch;
+    }
+
+    /* Modals */
+    .modal-dialog {
+      margin: 0.5rem;
+    }
+
+    .modal-content {
+      margin: 0;
+    }
+
+    .modal-body {
+      padding: 0.75rem;
+      max-height: 60vh;
+    }
+
+    /* Forms in modals */
+    .form-floating > .form-control,
+    .form-floating > .form-select {
+      height: calc(3rem + 2px);
+      min-height: calc(3rem + 2px);
+    }
+
+    .row.g-3 > [class*="col-"] {
+      padding-right: calc(var(--bs-gutter-x) * 0.5);
+      padding-left: calc(var(--bs-gutter-x) * 0.5);
+    }
+
+    /* Buttons */
+    .btn-group {
+      flex-wrap: nowrap;
+    }
+
+    .btn-group .btn {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+    }
+  }
+
+  /* Tablet styles */
+  @media (min-width: 768px) and (max-width: 991.98px) {
+    .stats-card {
+      padding: 1rem;
+    }
+
+    .modal-dialog.modal-lg {
+      max-width: 90%;
+    }
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    .modern-modal .modal-content {
+      background-color: var(--card-bg, #2d3748);
+      color: var(--text-color, #e2e8f0);
+    }
+
+    .table {
+      color: var(--text-color, #e2e8f0);
+    }
+
+    .table-hover tbody tr:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .form-control,
+    .form-select {
+      background-color: var(--card-bg, #2d3748);
+      border-color: var(--card-border-color, #4a5568);
+      color: var(--text-color, #e2e8f0);
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+      background-color: var(--card-bg, #2d3748);
+      border-color: var(--primary, #4299e1);
+      color: var(--text-color, #e2e8f0);
+    }
+
+    .form-check-input {
+      background-color: var(--card-bg, #2d3748);
+      border-color: var(--card-border-color, #4a5568);
+    }
+  }
+
+  /* Print styles */
+  @media print {
+    .dashboard-container {
+      padding: 0;
+    }
+
+    .btn,
+    .modal,
+    .dashboard-alert {
+      display: none !important;
+    }
+
+    .modern-card {
+      border: 1px solid #000;
+      box-shadow: none;
+    }
+
+    .table {
+      border: 1px solid #000;
+    }
+
+    .table th,
+    .table td {
+      border: 1px solid #000;
+    }
+  }
+  @media (min-width: 576px) {
+    .modal.show .modal-dialog.modal-dialog-centered {
+      margin: 0;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-height: 90vh;
+    }
+
+    .modal.show .modal-dialog.modal-dialog-centered .modal-content {
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+  }
+</style>
+
+{% endblock %}

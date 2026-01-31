@@ -1,0 +1,849 @@
+{% extends 'main/base.html' %}
+<!-- prettier-ignore -->
+{% block title %}Home - InnovateTech Solutions{% endblock %} {% block content %} {% load static %}
+
+<!-- Hero Section -->
+<section
+  class="hero-section bg-gradient-primary position-relative overflow-hidden w-full-screen"
+>
+  <div class="container">
+    <div class="row align-items-center min-vh-75 py-5">
+      <div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right">
+        <h1 class="display-3 fw-bold text-white mb-4">
+          Transforming Ideas Into Digital Reality
+        </h1>
+        <p class="lead text-white mb-5">
+          InnovateTech Solutions delivers cutting-edge technology products and
+          services that empower businesses to thrive in the digital age.
+        </p>
+        <div class="d-flex flex-wrap gap-3">
+          <a
+            href="#products"
+            class="btn btn-light btn-lg px-4 py-3 fw-semibold"
+          >
+            <i class="fas fa-rocket me-2"></i>Explore Products
+          </a>
+          <a
+            href="#about"
+            class="btn btn-outline-light btn-lg px-4 py-3 fw-semibold"
+          >
+            <i class="fas fa-play-circle me-2"></i>Watch Our Story
+          </a>
+        </div>
+      </div>
+      <div class="col-lg-6" data-aos="fade-left" data-aos-delay="200">
+        <div class="hero-image-container position-relative">
+          <img
+            src="{% static 'main/img/hero-tech.png' %}"
+            alt="InnovateTech Solutions"
+            class="img-fluid rounded-3 shadow-lg"
+          />
+          <div class="floating-card card-1">
+            <div class="d-flex align-items-center">
+              <div class="bg-primary card-circle rounded-circle p-2 me-3">
+                <i class="fas fa-chart-line text-white"></i>
+              </div>
+              <div>
+                <h6 class="mb-0">+45% Growth</h6>
+                <small class="text-muted">Client ROI</small>
+              </div>
+            </div>
+          </div>
+          <div class="floating-card card-2">
+            <div class="d-flex align-items-center">
+              <div class="bg-success card-circle rounded-circle p-2 me-3">
+                <i class="fas fa-award text-white"></i>
+              </div>
+              <div>
+                <h6 class="mb-0">Award 2025</h6>
+                <small class="text-muted">Tech Excellence</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-shape-bottom">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 1200 120"
+      preserveAspectRatio="none"
+    >
+      <path
+        d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+        class="shape-fill"
+      ></path>
+    </svg>
+  </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-5 bg-light mt-6">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-3 col-6 text-center" data-aos="fade-up">
+        <div class="stat-card p-4 rounded-3 bg-white shadow-sm">
+          <h2 class="display-4 fw-bold text-primary mb-2">150+</h2>
+          <p class="mb-0 fw-semibold text-muted">Projects Completed</p>
+        </div>
+      </div>
+      <div
+        class="col-md-3 col-6 text-center"
+        data-aos="fade-up"
+        data-aos-delay="100"
+      >
+        <div class="stat-card p-4 rounded-3 bg-white shadow-sm">
+          <h2 class="display-4 fw-bold text-primary mb-2">98%</h2>
+          <p class="mb-0 fw-semibold text-muted">Client Satisfaction</p>
+        </div>
+      </div>
+      <div
+        class="col-md-3 col-6 text-center"
+        data-aos="fade-up"
+        data-aos-delay="200"
+      >
+        <div class="stat-card p-4 rounded-3 bg-white shadow-sm">
+          <h2 class="display-4 fw-bold text-primary mb-2">50+</h2>
+          <p class="mb-0 fw-semibold text-muted">Team Members</p>
+        </div>
+      </div>
+      <div
+        class="col-md-3 col-6 text-center"
+        data-aos="fade-up"
+        data-aos-delay="300"
+      >
+        <div class="stat-card p-4 rounded-3 bg-white shadow-sm">
+          <h2 class="display-4 fw-bold text-primary mb-2">12</h2>
+          <p class="mb-0 fw-semibold text-muted">Years Experience</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="py-5">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right">
+        <div class="section-header mb-5">
+          <span class="badge bg-primary bg-opacity-10 text-primary mb-3"
+            >About Us</span
+          >
+          <h2 class="display-5 fw-bold mb-4">
+            Leading Technology Solutions Provider Since 2013
+          </h2>
+        </div>
+        <p class="lead text-muted mb-4">
+          At InnovateTech Solutions, we combine innovative thinking with
+          technical excellence to deliver solutions that drive business
+          transformation.
+        </p>
+
+        <div class="row mb-4">
+          <div class="col-sm-6 mb-3">
+            <div class="d-flex">
+              <div class="flex-shrink-0">
+                <i class="fas fa-check-circle text-primary"></i>
+              </div>
+              <div class="flex-grow-1 ms-3">
+                <h6 class="fw-bold">Custom Solutions</h6>
+                <p class="text-muted small mb-0">
+                  Tailored to your specific business needs
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 mb-3">
+            <div class="d-flex">
+              <div class="flex-shrink-0">
+                <i class="fas fa-check-circle text-primary"></i>
+              </div>
+              <div class="flex-grow-1 ms-3">
+                <h6 class="fw-bold">24/7 Support</h6>
+                <p class="text-muted small mb-0">
+                  Round-the-clock technical assistance
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 mb-3">
+            <div class="d-flex">
+              <div class="flex-shrink-0">
+                <i class="fas fa-check-circle text-primary"></i>
+              </div>
+              <div class="flex-grow-1 ms-3">
+                <h6 class="fw-bold">Future-Proof Tech</h6>
+                <p class="text-muted small mb-0">
+                  Solutions designed for tomorrow's challenges
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 mb-3">
+            <div class="d-flex">
+              <div class="flex-shrink-0">
+                <i class="fas fa-check-circle text-primary"></i>
+              </div>
+              <div class="flex-grow-1 ms-3">
+                <h6 class="fw-bold">Agile Methodology</h6>
+                <p class="text-muted small mb-0">
+                  Fast, iterative development approach
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="#" class="btn btn-primary btn-lg px-4">
+          <i class="fas fa-book-open me-2"></i>Read Our Story
+        </a>
+      </div>
+      <div class="col-lg-6" data-aos="fade-left">
+        <div class="about-image-container position-relative">
+          <img
+            src="{% static 'main/img/about-team.jpg' %}"
+            alt="Our Team"
+            class="img-fluid rounded-3 shadow"
+          />
+          <div
+            class="experience-badge bg-primary text-white rounded-pill px-4 py-2 position-absolute"
+          >
+            <h4 class="mb-0">12+ Years</h4>
+            <small>Industry Experience</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Services Section -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <span class="badge bg-primary bg-opacity-10 text-primary mb-3"
+        >Our Services</span
+      >
+      <h2 class="display-5 fw-bold mb-4">Comprehensive Technology Solutions</h2>
+      <p class="lead text-muted mx-auto" style="max-width: 600px">
+        We offer end-to-end technology services to help your business innovate,
+        scale, and succeed in the digital landscape.
+      </p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6" data-aos="fade-up">
+        <div class="service-card modern-card h-100 text-center p-4">
+          <div
+            class="service-icon bg-primary bg-opacity-10 text-primary rounded-circle mx-auto mb-4"
+          >
+            <i class="fas fa-laptop-code fa-2x"></i>
+          </div>
+          <h4 class="fw-bold mb-3">Custom Software Development</h4>
+          <p class="text-muted mb-4">
+            Tailored applications designed to solve your unique business
+            challenges and streamline operations.
+          </p>
+          <a href="#" class="btn btn-link text-primary p-0"
+            >Learn More <i class="fas fa-arrow-right ms-1"></i
+          ></a>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+        <div class="service-card modern-card h-100 text-center p-4">
+          <div
+            class="service-icon bg-success bg-opacity-10 text-success rounded-circle mx-auto mb-4"
+          >
+            <i class="fas fa-cloud fa-2x"></i>
+          </div>
+          <h4 class="fw-bold mb-3">Cloud Solutions</h4>
+          <p class="text-muted mb-4">
+            Scalable cloud infrastructure and migration services to enhance
+            flexibility and reduce costs.
+          </p>
+          <a href="#" class="btn btn-link text-primary p-0"
+            >Learn More <i class="fas fa-arrow-right ms-1"></i
+          ></a>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+        <div class="service-card modern-card h-100 text-center p-4">
+          <div
+            class="service-icon bg-warning bg-opacity-10 text-warning rounded-circle mx-auto mb-4"
+          >
+            <i class="fas fa-shield-alt fa-2x"></i>
+          </div>
+          <h4 class="fw-bold mb-3">Cybersecurity</h4>
+          <p class="text-muted mb-4">
+            Comprehensive security solutions to protect your digital assets and
+            ensure regulatory compliance.
+          </p>
+          <a href="#" class="btn btn-link text-primary p-0"
+            >Learn More <i class="fas fa-arrow-right ms-1"></i
+          ></a>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6" data-aos="fade-up">
+        <div class="service-card modern-card h-100 text-center p-4">
+          <div
+            class="service-icon bg-info bg-opacity-10 text-info rounded-circle mx-auto mb-4"
+          >
+            <i class="fas fa-mobile-alt fa-2x"></i>
+          </div>
+          <h4 class="fw-bold mb-3">Mobile Applications</h4>
+          <p class="text-muted mb-4">
+            Engaging native and cross-platform mobile apps that deliver
+            exceptional user experiences.
+          </p>
+          <a href="#" class="btn btn-link text-primary p-0"
+            >Learn More <i class="fas fa-arrow-right ms-1"></i
+          ></a>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+        <div class="service-card modern-card h-100 text-center p-4">
+          <div
+            class="service-icon bg-danger bg-opacity-10 text-danger rounded-circle mx-auto mb-4"
+          >
+            <i class="fas fa-brain fa-2x"></i>
+          </div>
+          <h4 class="fw-bold mb-3">AI & Machine Learning</h4>
+          <p class="text-muted mb-4">
+            Intelligent solutions that leverage data to automate processes and
+            generate valuable insights.
+          </p>
+          <a href="#" class="btn btn-link text-primary p-0"
+            >Learn More <i class="fas fa-arrow-right ms-1"></i
+          ></a>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+        <div class="service-card modern-card h-100 text-center p-4">
+          <div
+            class="service-icon bg-purple bg-opacity-10 text-purple rounded-circle mx-auto mb-4"
+          >
+            <i class="fas fa-chart-bar fa-2x"></i>
+          </div>
+          <h4 class="fw-bold mb-3">Data Analytics</h4>
+          <p class="text-muted mb-4">
+            Transform raw data into actionable intelligence to drive informed
+            business decisions.
+          </p>
+          <a href="#" class="btn btn-link text-primary p-0"
+            >Learn More <i class="fas fa-arrow-right ms-1"></i
+          ></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Products Preview Section -->
+<section id="products" class="py-5">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <span class="badge bg-primary bg-opacity-10 text-primary mb-3"
+        >Our Products</span
+      >
+      <h2 class="display-5 fw-bold mb-4">Featured Technology Solutions</h2>
+      <p class="lead text-muted mx-auto" style="max-width: 600px">
+        Explore our cutting-edge products designed to solve complex business
+        challenges and drive digital transformation.
+      </p>
+    </div>
+
+    <!-- Products will be dynamically injected here -->
+    <div class="row g-4" id="products-container">
+      <!-- JS will insert product cards here -->
+    </div>
+
+    <div class="text-center mt-5" data-aos="fade-up">
+      <a href="{% url 'products' %}" class="btn btn-primary btn-lg px-5">
+        <i class="fas fa-th-large me-2"></i>View All Products
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  async function fetchProducts() {
+    try {
+      const res = await fetch("{% url 'api_products' %}");
+      const products = await res.json();
+      const container = document.getElementById("products-container");
+      container.innerHTML = "";
+
+      if (products.length === 0) {
+        container.innerHTML = `
+                <div class="col-12 text-center" data-aos="fade-up">
+                    <div class="modern-card p-5">
+                        <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">No Products Available</h4>
+                        <p class="text-muted">Check back later for our latest offerings.</p>
+                    </div>
+                </div>
+            `;
+        return;
+      }
+
+      products.forEach((product, index) => {
+        container.innerHTML += `
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="${
+              100 + index * 100
+            }">
+                <div class="modern-card h-100 product-card">
+                    <div class="product-image-container">
+                        <img src="${
+                          product.image_url ||
+                          '{% static "main/img/gallery-img-01.jpg" %}'
+                        }"
+                             class="product-image" alt="${product.name}">
+                        <div class="product-overlay">
+                            <button class="btn btn-primary-modern btn-sm" onclick="showInquiryForm(${
+                              product.id
+                            })">
+                                <i class="fas fa-info-circle me-1"></i>Place Inquiry
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h5 class="fw-bold mb-2">${product.name}</h5>
+                        <p class="text-muted mb-3">${truncateWords(
+                          product.description,
+                          25
+                        )}</p>
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success bg-opacity-10 text-success">
+                                <i class="fas fa-box me-1"></i>${
+                                  product.quantity_available
+                                } Available
+                            </span>
+                            <span class="text-primary fw-bold">${
+                              product.price ? "$" + product.price : "Custom"
+                            }</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+      });
+    } catch (err) {
+      console.error("Error fetching products:", err);
+    }
+  }
+
+  // Helper to truncate words like Django's truncatewords
+  function truncateWords(str, numWords) {
+    return (
+      str.split(" ").slice(0, numWords).join(" ") +
+      (str.split(" ").length > numWords ? "..." : "")
+    );
+  }
+
+  // Fetch products on page load
+  fetchProducts();
+</script>
+
+<!-- Testimonials Section -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <span class="badge bg-primary bg-opacity-10 text-primary mb-3"
+        >Testimonials</span
+      >
+      <h2 class="display-5 fw-bold mb-4">What Our Clients Say</h2>
+      <p class="lead text-muted mx-auto" style="max-width: 600px">
+        Discover how InnovateTech Solutions has helped businesses transform
+        their operations and achieve remarkable results.
+      </p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-4" data-aos="fade-up">
+        <div class="testimonial-card modern-card h-100 p-4">
+          <div class="d-flex align-items-center mb-4">
+            <img
+              src="{% static 'main/img/client-1.jpg' %}"
+              alt="Client"
+              class="rounded-circle me-3"
+              width="60"
+              height="60"
+            />
+            <div>
+              <h5 class="fw-bold mb-0">Sarah Johnson</h5>
+              <p class="text-muted mb-0">CTO, TechForward Inc.</p>
+            </div>
+          </div>
+          <p class="text-muted mb-4">
+            "InnovateTech delivered a custom software solution that transformed
+            our workflow. Their team was professional, responsive, and truly
+            understood our business needs."
+          </p>
+          <div class="rating text-warning">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="testimonial-card modern-card h-100 p-4">
+          <div class="d-flex align-items-center mb-4">
+            <img
+              src="{% static 'main/img/client-2.jpg' %}"
+              alt="Client"
+              class="rounded-circle me-3"
+              width="60"
+              height="60"
+            />
+            <div>
+              <h5 class="fw-bold mb-0">Michael Chen</h5>
+              <p class="text-muted mb-0">CEO, Global Retail Solutions</p>
+            </div>
+          </div>
+          <p class="text-muted mb-4">
+            "The cloud migration project was completed ahead of schedule and
+            under budget. InnovateTech's expertise in cloud technologies is
+            truly impressive."
+          </p>
+          <div class="rating text-warning">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="testimonial-card modern-card h-100 p-4">
+          <div class="d-flex align-items-center mb-4">
+            <img
+              src="{% static 'main/img/client-3.jpg' %}"
+              alt="Client"
+              class="rounded-circle me-3"
+              width="60"
+              height="60"
+            />
+            <div>
+              <h5 class="fw-bold mb-0">Emily Rodriguez</h5>
+              <p class="text-muted mb-0">Director, HealthTech Innovations</p>
+            </div>
+          </div>
+          <p class="text-muted mb-4">
+            "Their cybersecurity solution protected us from a major breach. The
+            team's proactive approach and 24/7 support give us complete peace of
+            mind."
+          </p>
+          <div class="rating text-warning">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-primary text-white">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-8 mb-4 mb-lg-0" data-aos="fade-right">
+        <h2 class="display-5 fw-bold mb-3">
+          Ready to Transform Your Business?
+        </h2>
+        <p class="lead mb-0">
+          Contact us today to discuss how our technology solutions can drive
+          your success.
+        </p>
+      </div>
+      <div class="col-lg-4 text-lg-end" data-aos="fade-left">
+        <a
+          href="{% url 'contact' %}"
+          class="btn btn-light btn-lg px-5 py-3 fw-bold"
+        >
+          <i class="fas fa-paper-plane me-2"></i>Get In Touch
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Hero Section */
+  .hero-section {
+    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+    padding-top: 2rem;
+    padding-bottom: 6rem;
+    margin-top: -70px;
+  }
+
+  .min-vh-75 {
+    min-height: 75vh;
+  }
+
+  .hero-image-container {
+    position: relative;
+  }
+
+  .floating-card {
+    position: absolute;
+    background: white;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .card-1 {
+    top: 20%;
+    left: 20%;
+    animation-delay: 0s;
+  }
+
+  .card-circle {
+    height: 50px;
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .mt-6 {
+    margin-top: 6rem !important;
+  }
+
+  .card-2 {
+    bottom: 20%;
+    right: -5%;
+    animation-delay: 3s;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-15px);
+    }
+  }
+
+  .hero-shape-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    margin-top: 20px;
+  }
+
+  .hero-shape-bottom svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 100px;
+  }
+
+  .hero-shape-bottom .shape-fill {
+    fill: #ffffff;
+  }
+
+  /* Stats Section */
+  .stat-card {
+    transition: transform 0.3s ease;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-5px);
+  }
+
+  /* About Section */
+  .about-image-container {
+    position: relative;
+  }
+
+  .experience-badge {
+    bottom: -20px;
+    right: 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Services Section */
+  .service-card {
+    transition: transform 0.3s ease;
+  }
+
+  .service-card:hover {
+    transform: translateY(-10px);
+  }
+
+  .service-icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .bg-purple {
+    background-color: #6f42c1 !important;
+  }
+
+  .text-purple {
+    color: #6f42c1 !important;
+  }
+
+  /* Products Section */
+  .product-image-container {
+    position: relative;
+    overflow: hidden;
+    height: 250px;
+  }
+
+  .product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .product-card:hover .product-image {
+    transform: scale(1.05);
+  }
+
+  .product-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .product-card:hover .product-overlay {
+    opacity: 1;
+  }
+
+  /* Testimonials Section */
+  .testimonial-card {
+    transition: transform 0.3s ease;
+  }
+
+  .testimonial-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .rating i {
+    margin-right: 2px;
+  }
+
+  .w-full-screen {
+    width: calc(100% + 100px);
+    margin-left: -50px;
+    margin-right: -50px;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .display-3 {
+      font-size: 2.5rem;
+    }
+
+    .display-5 {
+      font-size: 2rem;
+    }
+
+    .floating-card {
+      position: relative;
+      margin-bottom: 1rem;
+    }
+
+    .card-1,
+    .card-2 {
+      position: relative;
+      top: auto;
+      bottom: auto;
+      left: auto;
+      right: auto;
+    }
+  }
+</style>
+
+<script>
+  // Initialize AOS animations
+  AOS.init({
+    duration: 800,
+    once: true,
+    offset: 100,
+  });
+
+  // Simple counter animation for stats
+  function animateCounters() {
+    const counters = document.querySelectorAll(".display-4");
+    const speed = 200;
+
+    counters.forEach((counter) => {
+      const target = +counter.innerText.replace("+", "");
+      const count = +counter.innerText;
+
+      if (count < target) {
+        const increment = target / speed;
+        const updateCount = () => {
+          const currentCount = +counter.innerText.replace("+", "");
+          if (currentCount < target) {
+            counter.innerText =
+              Math.ceil(currentCount + increment) +
+              (counter.innerText.includes("+") ? "+" : "");
+            setTimeout(updateCount, 1);
+          } else {
+            counter.innerText =
+              target + (counter.innerText.includes("+") ? "+" : "");
+          }
+        };
+        updateCount();
+      }
+    });
+  }
+
+  // Trigger counter animation when stats section is in view
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          animateCounters();
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.5 }
+  );
+
+  const statsSection = document.querySelector(".bg-light");
+  if (statsSection) {
+    observer.observe(statsSection);
+  }
+</script>
+{% endblock %}

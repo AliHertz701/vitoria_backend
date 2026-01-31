@@ -1,0 +1,135 @@
+{% extends 'main/base.html' %}
+{% block title %}Products{% endblock %}
+{% block content %}
+{% load static %}
+
+<h2 class="mb-4 text-center">Our Products</h2>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for product in products %}
+    <div class="col">
+        <div class="card h-100 shadow-sm" id="product-{{ product.id }}">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+            {% else %}
+            <img src="{% static 'main/img/gallery-img-01.jpg' %}" class="card-img-top" alt="No image">
+            {% endif %}
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text">{{ product.description|truncatewords:20 }}</p>
+                <p class="mb-2"><strong>Available:</strong> {{ product.quantity_available }}</p>
+                <button class="btn btn-primary mt-auto" onclick="showInquiryForm({{ product.id }})">
+                    Place Inquiry
+                </button>
+
+                <!-- Inline Inquiry Form -->
+                <div class="mt-3 inquiry-form-container" id="inquiry-form-{{ product.id }}" style="display:none;">
+                    <form class="inquiryForm">
+                        {% csrf_token %}
+                        <input type="hidden" name="product" value="{{ product.id }}">
+                        <div class="mb-3">
+                            <label class="form-label">Quantity</label>
+                            <input type="number" class="form-control" name="quantity" required min="1">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Delivery Address</label>
+                            <textarea class="form-control" name="address" rows="2" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">City</label>
+                            <input type="text" class="form-control" name="city" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Phone Number</label>
+                            <input type="text" class="form-control" name="phone_number" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Pick Location on Map</label>
+                            <div id="map-{{ product.id }}" style="height: 200px;"></div>
+                            <input type="hidden" name="latitude">
+                            <input type="hidden" name="longitude">
+                        </div>
+                        <button type="submit" class="btn btn-success">Submit Inquiry</button>
+                        <div class="text-danger mt-2 form-errors"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p>No products available.</p>
+    {% endfor %}
+</div>
+
+<!-- Load Google Maps API -->
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY"></script>
+
+<script>
+function showInquiryForm(productId){
+    const container = document.getElementById(`inquiry-form-${productId}`);
+    container.style.display = container.style.display === 'none' ? 'block' : 'none';
+    initMap(productId);
+}
+
+function initMap(productId){
+    const mapDiv = document.getElementById(`map-${productId}`);
+    if(mapDiv.dataset.initialized) return;
+    mapDiv.dataset.initialized = true;
+
+    const map = new google.maps.Map(mapDiv, {
+        center: { lat: 30.0444, lng: 31.2357 }, // Default coordinates (Cairo)
+        zoom: 6
+    });
+
+    let marker;
+    map.addListener('click', function(event){
+        let lat = event.latLng.lat();
+        let lng = event.latLng.lng();
+
+        // Round to 14 decimal places to prevent Django validation errors
+        lat = parseFloat(lat.toFixed(14));
+        lng = parseFloat(lng.toFixed(14));
+
+        if(marker) marker.setMap(null);
+        marker = new google.maps.Marker({
+            position: {lat, lng},
+            map: map
+        });
+
+        const form = mapDiv.closest('.inquiry-form-container').querySelector('form');
+        form.querySelector('[name=latitude]').value = lat;
+        form.querySelector('[name=longitude]').value = lng;
+    });
+}
+
+// Handle form submission via AJAX
+document.querySelectorAll('.inquiryForm').forEach(form => {
+    form.addEventListener('submit', function(e){
+        e.preventDefault();
+        const formData = new FormData(this);
+        const errorsDiv = this.querySelector('.form-errors');
+
+        fetch("{% url 'create_inquiry' %}", {
+            method: 'POST',
+            headers: { 'X-CSRFToken': formData.get('csrfmiddlewaretoken') },
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.id){
+                alert('Inquiry placed successfully!');
+                location.reload();
+            } else {
+                let errorsHTML = '';
+                for (const [field, messages] of Object.entries(data)){
+                    errorsHTML += `<p>${field}: ${messages.join(', ')}</p>`;
+                }
+                errorsDiv.innerHTML = errorsHTML;
+            }
+        })
+        .catch(err => errorsDiv.innerHTML = 'An error occurred.');
+    });
+});
+</script>
+
+{% endblock %}

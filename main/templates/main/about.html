@@ -1,0 +1,229 @@
+{% extends 'main/base.html' %} {% load i18n %}
+<!-- prettier-ignore -->
+{% block title %}
+{% trans "About Us - AWFERLK" %}{% endblock %} {% block content %}
+
+<!-- Page Header -->
+<section class="py-5 bg-primary text-white">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
+        <h1 class="display-4 fw-bold mb-4">{% trans "About AWFERLK" %}</h1>
+        <p class="lead mb-0">
+          <!-- prettier-ignore -->
+          {% blocktrans %}
+          Your trusted destination for modern, reliable, and affordable online shopping.
+          {% endblocktrans %}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Company Story -->
+<section class="py-5">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6" data-aos="fade-right">
+        <h2 class="fw-bold mb-4">{% trans "Our Story" %}</h2>
+
+        <p class="text-muted mb-4">
+          <!-- prettier-ignore -->
+          {% blocktrans %}
+          AWFERLK began with one simple belief: shopping should be easy, fast, and enjoyable.
+          Since 2020, we have grown from a small online shop into a trusted marketplace,
+          offering customers a seamless shopping experience with quality products, great prices,
+          and reliable service.
+          {% endblocktrans %}
+        </p>
+
+        <p class="text-muted mb-4">
+          <!-- prettier-ignore -->
+          {% blocktrans %}
+          Today, AWFERLK connects thousands of customers with fashion, electronics,
+          accessories, home essentials, beauty products, and more—handpicked to ensure
+          quality and value. Our mission is to make online shopping convenient, trustworthy,
+          and accessible for everyone.
+          {% endblocktrans %}
+        </p>
+        <!--
+        <div class="d-flex gap-3 flex-wrap">
+          <div class="text-center">
+            <h4 class="fw-bold text-primary">4+</h4>
+            <p class="text-muted mb-0">{% trans "Years of Service" %}</p>
+          </div>
+          <div class="text-center">
+            <h4 class="fw-bold text-primary">10,000+</h4>
+            <p class="text-muted mb-0">{% trans "Products" %}</p>
+          </div>
+          <div class="text-center">
+            <h4 class="fw-bold text-primary">5,000+</h4>
+            <p class="text-muted mb-0">{% trans "Happy Customers" %}</p>
+          </div>
+        </div>-->
+      </div>
+
+      <div class="col-lg-6" data-aos="fade-left">
+        <div class="modern-card p-4">
+          <img
+            src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=800&q=80"
+            alt="{% trans 'Shopping Experience' %}"
+            class="img-fluid rounded-3"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Mission & Vision -->
+<section class="py-5 section-alt">
+  <div class="container">
+    <div class="row g-4">
+      <!-- Mission -->
+      <div class="col-lg-6" data-aos="fade-up">
+        <div class="modern-card h-100 p-4">
+          <div class="text-center mb-4">
+            <i class="fas fa-shopping-cart fa-3x text-primary mb-3"></i>
+            <h3 class="fw-bold">{% trans "Our Mission" %}</h3>
+          </div>
+          <p class="text-muted">
+            <!-- prettier-ignore -->
+            {% blocktrans %}
+            To provide a fast, secure, and enjoyable online shopping experience where customers
+            can find everything they need—delivered with quality, affordability, and trust.
+            {% endblocktrans %}
+          </p>
+          <ul class="list-unstyled text-muted">
+            <li class="mb-2">
+              <i class="fas fa-check-circle text-success me-2"></i>
+              {% trans "High-quality products" %}
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check-circle text-success me-2"></i>
+              {% trans "Competitive and fair prices" %}
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check-circle text-success me-2"></i>
+              {% trans "Exceptional customer care" %}
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Vision -->
+      <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+        <div class="modern-card h-100 p-4">
+          <div class="text-center mb-4">
+            <i class="fas fa-eye fa-3x text-primary mb-3"></i>
+            <h3 class="fw-bold">{% trans "Our Vision" %}</h3>
+          </div>
+          <p class="text-muted">
+            <!-- prettier-ignore -->
+            {% blocktrans %}
+            To become the region’s most loved online shopping destination—known for innovation,
+            trust, and a world-class customer experience.
+            {% endblocktrans %}
+          </p>
+          <ul class="list-unstyled text-muted">
+            <li class="mb-2">
+              <i class="fas fa-star text-warning me-2"></i>
+              {% trans "Trusted Shopping Platform" %}
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-star text-warning me-2"></i>
+              {% trans "Continuous Innovation" %}
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-star text-warning me-2"></i>
+              {% trans "Expanding Product Variety" %}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Values -->
+<section class="py-5">
+  <div class="container">
+    <div class="text-center mb-5" data-aos="fade-up">
+      <h2 class="display-5 fw-bold mb-3">{% trans "Our Values" %}</h2>
+      <p class="lead text-muted">
+        <!-- prettier-ignore -->
+        {% blocktrans %}
+        The values that define our brand and guide every shopping experience.
+        {% endblocktrans %}
+      </p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="modern-card h-100 p-4 text-center">
+          <i class="fas fa-gem fa-2x text-warning mb-3"></i>
+          <h5 class="fw-bold mb-3">{% trans "Quality" %}</h5>
+          <p class="text-muted">
+            <!-- prettier-ignore -->
+            {% blocktrans %}
+            We carefully select every product to ensure the best quality for our customers.
+            {% endblocktrans %}
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="modern-card h-100 p-4 text-center">
+          <i class="fas fa-handshake fa-2x text-success mb-3"></i>
+          <h5 class="fw-bold mb-3">{% trans "Trust" %}</h5>
+          <p class="text-muted">
+            <!-- prettier-ignore -->
+            {% blocktrans %}
+            From product descriptions to delivery, we believe in transparency and honesty.
+            {% endblocktrans %}
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+        <div class="modern-card h-100 p-4 text-center">
+          <i class="fas fa-users fa-2x text-primary mb-3"></i>
+          <h5 class="fw-bold mb-3">{% trans "Customer First" %}</h5>
+          <p class="text-muted">
+            <!-- prettier-ignore -->
+            {% blocktrans %}
+            Your satisfaction comes first. Our team is always ready to help and support.
+            {% endblocktrans %}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Team CTA -->
+<section class="py-5 section-cta text-center">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 mx-auto" data-aos="zoom-in">
+        <h3 class="fw-bold mb-3">{% trans "Shop with Confidence" %}</h3>
+        <p class="lead mb-4">
+          <!-- prettier-ignore -->
+          {% blocktrans %}
+          Join thousands of customers who trust AWFERLK for quality, convenience, and great value.
+          Your next favorite product is just a click away!
+          {% endblocktrans %}
+        </p>
+        <a
+          href="{% url 'shop' %}"
+          class="btn btn-primary-modern btn-lg btn-modern"
+        >
+          <i class="fas fa-shopping-bag me-2"></i>
+          {% trans "Start Shopping" %}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,219 @@
+{% extends 'main/base.html' %}
+{% block title %}Login - InnovateTech Solutions{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-7">
+            <div class="modern-card p-4 p-sm-5" data-aos="fade-up">
+                <!-- Login Header -->
+                <div class="text-center mb-5">
+                    <div class="login-icon mb-4">
+                        <i class="fas fa-lock fa-3x text-primary"></i>
+                    </div>
+                    <h2 class="fw-bold">Welcome Back</h2>
+                    <p class="text-muted">Sign in to your account to continue</p>
+                </div>
+
+                <!-- Login Form -->
+                <form method="POST" id="loginForm">
+                    {% csrf_token %}
+                    
+                    {% if messages %}
+                    <div class="alert alert-danger" role="alert">
+                        {% for message in messages %}
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <!-- Username Field -->
+                    <div class="mb-4">
+                        <label for="username" class="form-label fw-semibold">
+                            <i class="fas fa-user me-2"></i>Username
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="fas fa-user text-muted"></i>
+                            </span>
+                            <input type="text" 
+                                   class="form-control border-start-0" 
+                                   id="username" 
+                                   name="username" 
+                                   required 
+                                   placeholder="Enter your username">
+                        </div>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="mb-4">
+                        <label for="password" class="form-label fw-semibold">
+                            <i class="fas fa-key me-2"></i>Password
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="fas fa-lock text-muted"></i>
+                            </span>
+                            <input type="password" 
+                                   class="form-control border-start-0" 
+                                   id="password" 
+                                   name="password" 
+                                   required 
+                                   placeholder="Enter your password">
+                            <button type="button" class="btn btn-outline-secondary border-start-0" onclick="togglePassword()">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Remember Me & Forgot Password -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="rememberMe">
+                            <label class="form-check-label text-muted small" for="rememberMe">
+                                Remember me
+                            </label>
+                        </div>
+                        <a href="#" class="text-primary small text-decoration-none">
+                            Forgot password?
+                        </a>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="d-grid mb-4">
+                        <button type="submit" class="btn btn-primary-modern btn-lg btn-modern" id="loginBtn">
+                            <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                        </button>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="text-center mb-4">
+                        <div class="position-relative">
+                            <hr>
+                            <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted small">
+                                Or continue with
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Social Login (Optional) -->
+                    <div class="d-grid gap-2 mb-4">
+                        <button type="button" class="btn btn-outline-dark btn-modern">
+                            <i class="fab fa-google me-2"></i>Continue with Google
+                        </button>
+                        <button type="button" class="btn btn-outline-primary btn-modern">
+                            <i class="fab fa-microsoft me-2"></i>Continue with Microsoft
+                        </button>
+                    </div>
+
+                    <!-- Sign Up Link -->
+                    <div class="text-center">
+                        <p class="text-muted mb-0">
+                            Don't have an account? 
+                            <a href="#" class="text-primary text-decoration-none fw-semibold">Contact administrator</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Security Notice -->
+            <div class="text-center mt-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="d-inline-flex align-items-center text-muted small">
+                    <i class="fas fa-shield-alt me-2 text-success"></i>
+                    <span>Your login information is securely encrypted</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function togglePassword() {
+    const passwordInput = document.getElementById('password');
+    const toggleIcon = document.querySelector('#password + .btn i');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        toggleIcon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+}
+
+// Form submission handling
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    const submitBtn = document.getElementById('loginBtn');
+    const originalText = submitBtn.innerHTML;
+    
+    // Show loading state
+    submitBtn.innerHTML = '<div class="loading-spinner me-2"></div>Signing in...';
+    submitBtn.disabled = true;
+    
+    // Form will submit normally, loading state will be reset if there's an error
+});
+
+// Add input animations
+document.querySelectorAll('.form-control').forEach(input => {
+    input.addEventListener('focus', function() {
+        this.parentElement.classList.add('focus');
+    });
+    
+    input.addEventListener('blur', function() {
+        if (!this.value) {
+            this.parentElement.classList.remove('focus');
+        }
+    });
+});
+</script>
+
+<style>
+.login-icon {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    color: white;
+}
+
+.input-group:focus-within {
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    border-radius: 8px;
+}
+
+.input-group:focus-within .input-group-text {
+    border-color: var(--primary);
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: var(--primary);
+}
+
+.form-check-input:checked {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .modern-card {
+        margin: 1rem;
+        padding: 2rem !important;
+    }
+}
+</style>
+{% endblock %}

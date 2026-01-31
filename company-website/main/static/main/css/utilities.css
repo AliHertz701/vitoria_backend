@@ -1,0 +1,89 @@
+/* utilities.css */
+
+/* Utility Classes */
+
+/* Flex Utilities */
+.d-flex {
+    display: flex !important;
+}
+.flex-column {
+    flex-direction: column !important;
+}
+.flex-row {
+    flex-direction: row !important;
+}
+.justify-content-center {
+    justify-content: center !important;
+}
+.align-items-center {
+    align-items: center !important;
+}
+
+/* Margin Utilities */
+.m-0 {
+    margin: 0 !important;
+}
+.mt-1 {
+    margin-top: 0.25rem !important;
+}
+.mb-1 {
+    margin-bottom: 0.25rem !important;
+}
+.mx-auto {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* Padding Utilities */
+.p-0 {
+    padding: 0 !important;
+}
+.pt-1 {
+    padding-top: 0.25rem !important;
+}
+.pb-1 {
+    padding-bottom: 0.25rem !important;
+}
+
+/* Text Utilities */
+.text-center {
+    text-align: center !important;
+}
+.text-danger {
+    color: #dc3545 !important;
+}
+.text-success {
+    color: #28a745 !important;
+}
+
+/* Background Utilities */
+.bg-light {
+    background-color: #f8f9fa !important;
+}
+.bg-dark {
+    background-color: #343a40 !important;
+}
+
+/* Display Utilities */
+.d-none {
+    display: none !important;
+}
+.d-block {
+    display: block !important;
+}
+
+/* Border Utilities */
+.border {
+    border: 1px solid #dee2e6 !important;
+}
+.border-radius {
+    border-radius: 0.25rem !important;
+}
+
+/* Custom Utility Classes */
+.cursor-pointer {
+    cursor: pointer !important;
+}
+.pointer-events-none {
+    pointer-events: none !important;
+}

@@ -1,0 +1,730 @@
+{% extends 'main/base.html' %} {% block title %}Contact Us - InnovateTech
+Solutions{% endblock %} {% block content %}
+<!-- Contact Header -->
+<section class="contact-header py-5 bg-primary text-white">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
+        <h1 class="display-5 fw-bold mb-4">Get In Touch</h1>
+        <p class="lead mb-0">
+          We'd love to hear from you. Send us a message and we'll respond as
+          soon as possible.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Form & Info -->
+<section class="py-5">
+  <div class="container">
+    <div class="row g-5">
+      <!-- Contact Form -->
+      <div class="col-lg-6" data-aos="fade-right">
+        <div class="modern-card p-4 p-md-5 h-100">
+          <h3 class="fw-bold mb-4">
+            <i class="fas fa-paper-plane me-2 text-primary"></i>Send Us a
+            Message
+          </h3>
+
+          <form method="POST" id="contactForm">
+            {% csrf_token %} {% if messages %}
+            <div class="alert alert-success" role="alert">
+              {% for message in messages %}
+              <div class="d-flex align-items-center">
+                <i class="fas fa-check-circle me-2"></i>
+                {{ message }}
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="mb-4">
+              <label for="email" class="form-label fw-semibold"
+                >Email Address</label
+              >
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0">
+                  <i class="fas fa-envelope text-muted"></i>
+                </span>
+                <input
+                  type="email"
+                  class="form-control border-start-0"
+                  id="email"
+                  name="email"
+                  placeholder="your.email@example.com"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label for="message" class="form-label fw-semibold"
+                >Your Message</label
+              >
+              <div class="input-group">
+                <span
+                  class="input-group-text bg-light align-items-start border-end-0 pt-3"
+                >
+                  <i class="fas fa-comment text-muted"></i>
+                </span>
+                <textarea
+                  class="form-control border-start-0"
+                  id="message"
+                  name="message"
+                  rows="5"
+                  placeholder="Tell us how we can help you..."
+                  required
+                ></textarea>
+              </div>
+            </div>
+
+            <div class="d-grid">
+              <button
+                class="btn btn-primary-modern btn-lg btn-modern"
+                type="submit"
+                id="submitBtn"
+              >
+                <i class="fas fa-paper-plane me-2"></i>Send Message
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Contact Information -->
+      <div class="col-lg-6" data-aos="fade-left">
+        <div class="modern-card p-4 p-md-5 h-100">
+          <h3 class="fw-bold mb-4">
+            <i class="fas fa-info-circle me-2 text-primary"></i>Contact
+            Information
+          </h3>
+
+          <div class="contact-info">
+            <div class="contact-item d-flex mb-4">
+              <div
+                class="contact-icon bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+              >
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div>
+                <h6 class="fw-semibold mb-1">Our Headquarters</h6>
+                <p class="text-muted mb-0" id="contactAddress">
+                  Loading address from primary branch...
+                </p>
+              </div>
+            </div>
+
+            <div class="contact-item d-flex mb-4">
+              <div
+                class="contact-icon bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+              >
+                <i class="fas fa-phone"></i>
+              </div>
+              <div>
+                <h6 class="fw-semibold mb-1">Phone Number</h6>
+                <p class="text-muted mb-0" id="contactPhone">
+                  Loading phone number...
+                </p>
+              </div>
+            </div>
+
+            <div class="contact-item d-flex mb-4">
+              <div
+                class="contact-icon bg-warning text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+              >
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div>
+                <h6 class="fw-semibold mb-1">Email Address</h6>
+                <p class="text-muted mb-0" id="contactEmail">
+                  Loading email address...
+                </p>
+              </div>
+            </div>
+
+            <div class="contact-item d-flex">
+              <div
+                class="contact-icon bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+              >
+                <i class="fas fa-clock"></i>
+              </div>
+              <div>
+                <h6 class="fw-semibold mb-1">Business Hours</h6>
+                <p class="text-muted mb-0" id="contactHours">
+                  Loading business hours...
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <hr class="my-4" />
+
+          <div class="social-links">
+            <h6 class="fw-semibold mb-3">Follow Us</h6>
+            <div class="d-flex gap-3">
+              <a
+                id="contactFacebook"
+                href="#"
+                class="social-link bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+              >
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a
+                id="contactTwitter"
+                href="#"
+                class="social-link bg-info text-white rounded-circle d-flex align-items-center justify-content-center"
+              >
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a
+                id="contactLinkedin"
+                href="#"
+                class="social-link bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+              >
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+              <a
+                id="contactInstagram"
+                href="#"
+                class="social-link bg-dark text-white rounded-circle d-flex align-items-center justify-content-center"
+              >
+                <i class="fab fa-instagram"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Our Branches Section -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="text-center mb-5" data-aos="fade-up">
+      <h2 class="display-6 fw-bold mb-3">Our Branches</h2>
+      <p class="lead text-muted">Visit us at any of our locations worldwide</p>
+    </div>
+
+    <div class="row g-4" id="branches-container">
+      <!-- Branches will be loaded here dynamically -->
+      <div class="col-12 text-center py-5" id="loading-branches">
+        <div class="loading-spinner-large mb-3"></div>
+        <p class="text-muted">Loading branches...</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Branch Detail Modal -->
+<div class="modal fade" id="branchModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content modern-modal">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="branchModalTitle">
+          <i class="fas fa-map-marker-alt me-2"></i>Branch Details
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+      <div class="modal-body p-0">
+        <div class="row g-0">
+          <div class="col-md-6">
+            <div id="branchDetailMap" style="height: 400px; width: 100%"></div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-4">
+              <h4 id="branchDetailName" class="fw-bold mb-3"></h4>
+              <div class="branch-info mb-4">
+                <div class="d-flex align-items-center mb-3">
+                  <i class="fas fa-map-marker-alt text-danger me-2"></i>
+                  <span id="branchDetailAddress" class="text-muted"></span>
+                </div>
+                <div class="d-flex align-items-center mb-3">
+                  <i class="fas fa-phone text-success me-2"></i>
+                  <span id="branchDetailPhone" class="text-muted"></span>
+                </div>
+                <div class="d-flex align-items-center mb-3">
+                  <i class="fas fa-clock text-warning me-2"></i>
+                  <span id="branchDetailHours" class="text-muted"></span>
+                </div>
+                <div class="d-flex align-items-center">
+                  <i class="fas fa-envelope text-primary me-2"></i>
+                  <span id="branchDetailEmail" class="text-muted"></span>
+                </div>
+              </div>
+              <div class="coordinates">
+                <small class="text-muted">
+                  Coordinates: <span id="branchDetailCoordinates"></span>
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block extra_js %}
+<script>
+  // Global variables
+  let branchMaps = {};
+  let branchMarkers = {};
+  let allBranches = []; // Array to store all fetched branches
+
+  function setContactInfoFromBranches(branches) {
+    if (!branches || !branches.length) return;
+
+    // pick primary branch if exists, else first branch
+    let primary =
+      branches.find((b) => b.primery_branch === true) || branches[0];
+
+    const addressEl = document.getElementById("contactAddress");
+    const phoneEl = document.getElementById("contactPhone");
+    const emailEl = document.getElementById("contactEmail");
+    const hoursEl = document.getElementById("contactHours");
+
+    if (addressEl) {
+      addressEl.textContent = primary.address || "Address not set";
+    }
+
+    if (phoneEl) {
+      // model field is phone_number
+      phoneEl.textContent = primary.phone_number || "Phone number not set";
+    }
+
+    if (emailEl) {
+      // model field is Email_Adress
+      emailEl.textContent = primary.Email_Adress || "Email not set";
+    }
+
+    if (hoursEl) {
+      const dayFrom = primary.day_from || "";
+      const dayTo = primary.day_to || "";
+      const open = primary.opening_hours || "";
+      const close = primary.closing_hours || "";
+
+      let hoursText = "";
+
+      if (dayFrom || dayTo) {
+        hoursText += dayFrom;
+        if (dayTo) hoursText += dayFrom ? ` - ${dayTo}` : dayTo;
+      }
+
+      if (open || close) {
+        if (hoursText) hoursText += ": ";
+        hoursText += open;
+        if (close) hoursText += open ? ` - ${close}` : close;
+      }
+
+      if (!hoursText) {
+        hoursText = "Business hours not set";
+      }
+
+      hoursEl.textContent = hoursText;
+    }
+    // 🔗 Social media (Contact page)
+    const fbEl = document.getElementById("contactFacebook");
+    if (fbEl && primary.facbook_link) {
+      fbEl.href = primary.facbook_link || "#";
+    }
+
+    const twEl = document.getElementById("contactTwitter");
+    if (twEl && primary.twitter_link) {
+      twEl.href = primary.twitter_link || "#";
+    }
+
+    const lnEl = document.getElementById("contactLinkedin");
+    if (lnEl && primary.linkdin_link) {
+      lnEl.href = primary.linkdin_link || "#";
+    }
+
+    const igEl = document.getElementById("contactInstagram");
+    if (igEl && primary.instagram_link) {
+      igEl.href = primary.instagram_link || "#";
+    }
+  }
+
+  // Load branches and initialize individual maps
+  async function loadBranches() {
+    try {
+      const response = await fetch("{% url 'branch-list-api' %}");
+      let branches = await response.json();
+
+      // Store all branches in the global array
+      allBranches = branches;
+
+      // ✅ Set Contact Us info from primary branch (or first)
+      setContactInfoFromBranches(branches);
+
+      if (!branches.length) {
+        document.getElementById("branches-container").innerHTML = `
+                <div class="col-12 text-center py-5">
+                    <i class="fas fa-store-alt fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">No branches available</h5>
+                    <p class="text-muted">Check back later for branch information.</p>
+                </div>
+            `;
+        return;
+      }
+
+      const validBranches = branches
+        .map((b) => {
+          const lat = parseFloat(b.latitude);
+          const lng = parseFloat(b.longitude);
+          if (
+            !isNaN(lat) &&
+            !isNaN(lng) &&
+            lat >= -90 &&
+            lat <= 90 &&
+            lng >= -180 &&
+            lng <= 180
+          ) {
+            return {
+              id: b.id,
+              lat,
+              lng,
+              name: b.name,
+              address: b.address,
+              phone: b.phone || "+1 (555) 123-4567",
+              hours: b.hours || "Mon-Fri: 9AM-6PM",
+              email: b.email || "info@innovatetech.com",
+              facbook_link: b.facbook_link || "#",
+              twitter_link: b.twitter_link || "#",
+              linkdin_link: b.linkdin_link || "#",
+              instagram_link: b.instagram_link || "#",
+            };
+          }
+          return null;
+        })
+        .filter(Boolean);
+
+      if (!validBranches.length) {
+        document.getElementById("branches-container").innerHTML = `
+                <div class="col-12 text-center py-5">
+                    <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                    <h5 class="text-muted">No valid branch locations</h5>
+                    <p class="text-muted">Please check branch coordinate data.</p>
+                </div>
+            `;
+        return;
+      }
+
+      // Remove loading indicator
+      document.getElementById("loading-branches").remove();
+
+      // Render branch cards
+      const branchesContainer = document.getElementById("branches-container");
+
+      validBranches.forEach((branch, index) => {
+        const branchCard = document.createElement("div");
+        branchCard.className = "col-lg-4 col-md-6";
+        branchCard.setAttribute("data-aos", "fade-up");
+        branchCard.setAttribute("data-aos-delay", (index * 100).toString());
+
+        branchCard.innerHTML = `
+                <div class="branch-card modern-card h-100">
+                    <div class="branch-map" id="branch-map-${branch.id}"></div>
+                    <div class="branch-content p-4">
+                        <h5 class="fw-bold mb-2">${branch.name}</h5>
+                        <p class="text-muted mb-3">${branch.address}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="fas fa-map-pin me-1"></i>
+                                ${branch.lat.toFixed(4)}, ${branch.lng.toFixed(
+          4
+        )}
+                            </small>
+                            <button class="btn btn-outline-primary btn-sm" onclick="showBranchDetails(${
+                              branch.id
+                            })">
+                                <i class="fas fa-info-circle me-1"></i>Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+        branchesContainer.appendChild(branchCard);
+
+        // Initialize individual map for this branch
+        setTimeout(() => initBranchMap(branch), 100);
+      });
+    } catch (error) {
+      console.error("Error loading branches:", error);
+      document.getElementById("branches-container").innerHTML = `
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-exclamation-triangle fa-3x text-danger mb-3"></i>
+                <h5 class="text-muted">Error loading branches</h5>
+                <p class="text-muted">Please try refreshing the page.</p>
+            </div>
+        `;
+    }
+  }
+
+  // Initialize individual branch map
+  function initBranchMap(branch) {
+    const mapElement = document.getElementById(`branch-map-${branch.id}`);
+    if (!mapElement) return;
+
+    const map = new google.maps.Map(mapElement, {
+      zoom: 15,
+      center: { lat: branch.lat, lng: branch.lng },
+      mapTypeControl: false,
+      streetViewControl: false,
+      fullscreenControl: false,
+      styles: [
+        {
+          featureType: "all",
+          elementType: "geometry",
+          stylers: [{ color: "#f5f5f5" }],
+        },
+        {
+          featureType: "water",
+          elementType: "geometry",
+          stylers: [{ color: "#c5e1f6" }],
+        },
+      ],
+    });
+
+    const marker = new google.maps.Marker({
+      position: { lat: branch.lat, lng: branch.lng },
+      map: map,
+      title: branch.name,
+      animation: google.maps.Animation.DROP,
+    });
+
+    // Store map and marker references
+    branchMaps[branch.id] = map;
+    branchMarkers[branch.id] = marker;
+  }
+
+  // Show branch details in modal
+  function showBranchDetails(branchId) {
+    // Find the branch in the stored array
+    const branch = getBranchById(branchId);
+    if (!branch) {
+      console.error(`Branch with ID ${branchId} not found`);
+      return;
+    }
+
+    document.getElementById("branchModalTitle").innerHTML = `
+        <i class="fas fa-map-marker-alt me-2"></i>${branch.name}
+    `;
+    document.getElementById("branchDetailName").textContent = branch.name;
+    document.getElementById("branchDetailAddress").textContent = branch.address;
+    document.getElementById("branchDetailPhone").textContent = branch.phone;
+    document.getElementById("branchDetailHours").textContent = branch.hours;
+    document.getElementById("branchDetailEmail").textContent = branch.email;
+    document.getElementById(
+      "branchDetailCoordinates"
+    ).textContent = `${branch.lat.toFixed(6)}, ${branch.lng.toFixed(6)}`;
+
+    // Initialize or update the detail map
+    setTimeout(() => initDetailMap(branch), 100);
+
+    // Show the modal
+    const branchModal = new bootstrap.Modal(
+      document.getElementById("branchModal")
+    );
+    branchModal.show();
+  }
+
+  // Helper function to get branch by ID from the stored array
+  function getBranchById(branchId) {
+    // Find the branch in the allBranches array
+    const branch = allBranches.find((b) => b.id === branchId);
+    if (!branch) return null;
+
+    // Parse coordinates and return formatted branch data
+    const lat = parseFloat(branch.latitude);
+    const lng = parseFloat(branch.longitude);
+
+    return {
+      id: branch.id,
+      name: branch.name,
+      address: branch.address,
+      lat: lat,
+      lng: lng,
+      phone: branch.phone || "+1 (555) 123-4567",
+      hours: branch.hours || "Mon-Fri: 9AM-6PM",
+      email: branch.email || "info@innovatetech.com",
+    };
+  }
+
+  // Initialize detail map in modal
+  function initDetailMap(branch) {
+    const mapElement = document.getElementById("branchDetailMap");
+    if (!mapElement) return;
+
+    // Clear previous map if exists
+    mapElement.innerHTML = "";
+
+    const map = new google.maps.Map(mapElement, {
+      zoom: 16,
+      center: { lat: branch.lat, lng: branch.lng },
+      mapTypeControl: true,
+      streetViewControl: true,
+      fullscreenControl: true,
+    });
+
+    const marker = new google.maps.Marker({
+      position: { lat: branch.lat, lng: branch.lng },
+      map: map,
+      title: branch.name,
+      animation: google.maps.Animation.BOUNCE,
+    });
+
+    const infoWindow = new google.maps.InfoWindow({
+      content: `
+            <div class="p-2">
+                <h6 class="fw-bold mb-1">${branch.name}</h6>
+                <p class="mb-0 small">${branch.address}</p>
+            </div>
+        `,
+    });
+
+    marker.addListener("click", () => {
+      infoWindow.open(map, marker);
+    });
+
+    // Open info window automatically
+    setTimeout(() => {
+      infoWindow.open(map, marker);
+    }, 500);
+  }
+
+  // Form submission handling
+  document
+    .getElementById("contactForm")
+    .addEventListener("submit", function (e) {
+      const submitBtn = document.getElementById("submitBtn");
+      const originalText = submitBtn.innerHTML;
+
+      // Show loading state
+      submitBtn.innerHTML =
+        '<div class="loading-spinner me-2"></div>Sending...';
+      submitBtn.disabled = true;
+
+      // Form will submit normally, this is just for visual feedback
+    });
+
+  // Load branches when Google Maps is ready
+  function initMap() {
+    loadBranches();
+  }
+
+  // Reset form button when modal is closed
+  document
+    .getElementById("branchModal")
+    .addEventListener("hidden.bs.modal", function () {
+      // Clean up any map resources if needed
+      const mapElement = document.getElementById("branchDetailMap");
+      if (mapElement) {
+        mapElement.innerHTML = "";
+      }
+    });
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyArwI9jJAXm0u75YnXMTTq6v0CpVkqQRP0&callback=initMap"></script>
+
+<style>
+  .contact-header {
+    margin-top: -2rem;
+    padding-top: 6rem;
+  }
+
+  .contact-icon {
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+  }
+
+  .social-link {
+    width: 40px;
+    height: 40px;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+  }
+
+  .social-link:hover {
+    transform: translateY(-3px);
+  }
+
+  .branch-card {
+    transition: transform 0.3s ease;
+    overflow: hidden;
+  }
+
+  .branch-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .branch-map {
+    height: 200px;
+    width: 100%;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .branch-content {
+    flex: 1;
+  }
+
+  .loading-spinner-large {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: var(--primary);
+    animation: spin 1s ease-in-out infinite;
+  }
+
+  .input-group:focus-within {
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+    border-radius: 8px;
+  }
+
+  .input-group:focus-within .input-group-text {
+    border-color: var(--primary);
+  }
+
+  .form-control:focus {
+    box-shadow: none;
+    border-color: var(--primary);
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .contact-icon {
+      width: 40px;
+      height: 40px;
+    }
+
+    .branch-map {
+      height: 180px;
+    }
+
+    .modern-modal .modal-body .row {
+      flex-direction: column;
+    }
+
+    .modern-modal .modal-body .col-md-6 {
+      width: 100%;
+    }
+
+    #branchDetailMap {
+      height: 250px;
+    }
+  }
+</style>
+{% endblock %}
